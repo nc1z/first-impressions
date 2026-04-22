@@ -67,6 +67,7 @@ export async function runCodexPrompt(prompt: string): Promise<string> {
       command: "codex",
       args: [
         "exec",
+        "--ephemeral",
         "--skip-git-repo-check",
         "--sandbox",
         "read-only",

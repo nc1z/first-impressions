@@ -28,9 +28,31 @@ They must already be installed and authenticated in the local environment.
 
 This repository is configured for `pnpm`, with a 7-day `minimumReleaseAge` set in `pnpm-workspace.yaml`.
 
+## Commands
+
+- `pnpm dev run "Your idea here" --provider codex`
+- `pnpm dev run --file ./idea.txt --provider claude`
+- `pnpm dev run --url https://example.com --provider copilot`
+- `pnpm dev providers list`
+- `pnpm dev personas list`
+- `pnpm dev report <run-id>`
+
+For the built CLI:
+
+- `pnpm build`
+- `pnpm start -- run "Your idea here" --provider claude`
+
+Run artifacts are written to `./.first-impressions/runs/<run-id>/`.
+
+## Notes
+
+- `claude` and `copilot` were validated end-to-end from this repo.
+- `codex` is supported by the adapter layer, but it expects a writable Codex home/session area in the runtime environment.
+
 ## Scripts
 
 - `pnpm build`
 - `pnpm dev`
 - `pnpm lint`
+- `pnpm start`
 - `pnpm test`

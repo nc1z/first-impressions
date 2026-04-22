@@ -5,6 +5,7 @@ import type { IdeaInput, PersonaReaction, ProviderName, RunArtifacts, RunMode, R
 import { resolveIdeaInput } from "./ingest.js";
 import { selectRunPersonas } from "./personas.js";
 import { createProviderAdapter } from "./providers/index.js";
+import { generateReport } from "./report.js";
 import { ensureDir, writeJson, writeJsonLines } from "./utils/fs.js";
 import { createSeedFromText } from "./utils/random.js";
 
@@ -101,6 +102,10 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
   };
 
   await persistRunArtifacts(runDirectory, artifacts, input);
+  await generateReport({
+    runDirectory,
+    artifacts,
+  });
 
   return { artifacts, runDirectory };
 }

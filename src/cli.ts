@@ -3,10 +3,12 @@
 import path from "node:path";
 
 import { Command } from "commander";
+import { stat } from "node:fs/promises";
 
 import { loadPersonaCatalog } from "./personas.js";
 import { listProviderStatuses } from "./providers/index.js";
 import { executeRun } from "./run.js";
+import { startStaticServer } from "./server.js";
 
 const program = new Command();
 
@@ -43,6 +45,7 @@ program
     console.log(`Run complete: ${artifacts.manifest.runId}`);
     console.log(`Provider: ${artifacts.manifest.provider}`);
     console.log(`Artifacts: ${runDirectory}`);
+    console.log(`Report files: ${path.join(runDirectory, "report")}`);
     console.log(`Average reaction score: ${artifacts.insights.averageReactionScore}`);
   });
 
@@ -68,6 +71,29 @@ personasCommand
     for (const persona of catalog) {
       console.log(`${persona.id}\t${persona.ageBand}\t${persona.industry}\t${persona.summary}`);
     }
+  });
+
+program
+  .command("report")
+  .description("Serve a generated report for an existing run.")
+  .argument("<runId>", "Run ID to serve")
+  .option("--output <path>", "Base output directory", path.resolve(process.cwd(), ".first-impressions"))
+  .option("--port <number>", "Port to bind to", "0")
+  .action(async (runId: string, options) => {
+    const reportDirectory = path.resolve(options.output, "runs", runId, "report");
+    await stat(path.join(reportDirectory, "index.html"));
+    const server = await startStaticServer({
+      directory: reportDirectory,
+      port: Number(options.port),
+    });
+
+    console.log(`Serving report for ${runId}`);
+    console.log(server.url);
+
+    process.on("SIGINT", async () => {
+      await server.close();
+      process.exit(0);
+    });
   });
 
 program.parseAsync(process.argv).catch((error: unknown) => {
