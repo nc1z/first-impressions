@@ -12,7 +12,21 @@ Install dependencies:
 pnpm install
 ```
 
-Run against an idea:
+Start the interactive audience prompt:
+
+```sh
+pnpm dev
+```
+
+You will see:
+
+```text
+You are now in front of an audience of 100 people.
+Share your project or idea.
+idea>
+```
+
+For scripted or explicit-input runs:
 
 ```sh
 pnpm dev run "Your idea here" --provider claude
@@ -53,7 +67,7 @@ Run artifacts are written to `.first-impressions/runs/<run-id>/`.
 
 ```sh
 pnpm build     # compile
-pnpm dev       # run from source
+pnpm dev       # interactive run from source
 pnpm start     # run compiled build
 pnpm test      # run tests
 pnpm lint      # lint
