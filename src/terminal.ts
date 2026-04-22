@@ -95,7 +95,6 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
     intro(): void {
       writeLine(paint("blue", asciiBanner()));
       writeLine(`${paint("dim", "Fast AI audience simulation for first impressions.")}`);
-      writeLine(`${paint("dim", 'Tip: try ideas like "A browser extension for..." or pass --url / --file.')}`);
       writeLine();
     },
     onProgress(event: RunProgressEvent): void {
@@ -191,14 +190,10 @@ export function formatDuration(elapsedMs: number): string {
 
 export function asciiBanner(): string {
   return [
-    "  ______ _          _      _____                                   _             ",
-    " |  ____(_)        | |    |_   _|                                 (_)            ",
-    " | |__   _ _ __ ___| |_     | |  _ __ ___  _ __  _ __ ___  ___ ___ _  ___  _ __  ",
-    " |  __| | | '__/ __| __|    | | | '_ ` _ \\| '_ \\| '__/ _ \\/ __/ __| |/ _ \\| '_ \\ ",
-    " | |    | | |  \\__ \\ |_    _| |_| | | | | | |_) | | |  __/\\__ \\__ \\ | (_) | | | |",
-    " |_|    |_|_|  |___/\\__|  |_____|_| |_| |_| .__/|_|  \\___||___/___/_|\\___/|_| |_|",
-    "                                          | |                                      ",
-    "                                          |_|                                      ",
+    "  __| _ _|  _ \\   __| __ __|   _ _|   \\  |  _ \\ _ \\  __|   __|   __| _ _|   _ \\   \\ |   __|",
+    "  _|    |     / \\__ \\    |       |   |\\/ |  __/   /  _|  \\__ \\ \\__ \\   |   (   | .  | \\__ \\",
+    " _|   ___| _|_\\ ____/   _|     ___| _|  _| _|  _|_\\ ___| ____/ ____/ ___| \\___/ _|\\_| ____/",
+    "                                                                                             ",
   ].join("\n");
 }
 

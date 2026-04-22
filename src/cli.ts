@@ -216,8 +216,8 @@ async function promptForIdeaText(reporter: ReturnType<typeof createRunReporter>)
 
   reporter.info([
     "You are now in front of an audience of 100 people.",
-    "Share your project or idea.",
-    'Try a one-liner like: "An app that turns long PDFs into flashcards."',
+    "Pitch your product or idea.",
+    "You can give extra context, explain the problem, and include links or source material if you want.",
     "",
   ]);
 
