@@ -55,12 +55,18 @@ program.action(async (options) => {
   activeReporter = reporter;
   reporter.intro();
 
+  const providerSource = program.getOptionValueSource("provider");
+  const provider =
+    providerSource === "default" && stdin.isTTY
+      ? await promptForProvider()
+      : (options.provider as "codex" | "claude" | "copilot");
+
   const text = await promptForIdeaText(reporter);
   await runSimulation({
     text,
     file: undefined,
     url: undefined,
-    provider: options.provider as "codex" | "claude" | "copilot",
+    provider,
     mode: options.mode as "general" | "tagged-segment",
     count: Number(options.count),
     seed: options.seed ? Number(options.seed) : undefined,
@@ -286,6 +292,66 @@ async function serveReport(options: {
     process.once("SIGINT", () => {
       void server.close().then(resolve).catch(reject);
     });
+  });
+}
+
+async function promptForProvider(): Promise<"codex" | "claude" | "copilot"> {
+  const providers: Array<{ id: "codex" | "claude" | "copilot"; label: string }> = [
+    { id: "codex", label: "codex      OpenAI Codex" },
+    { id: "claude", label: "claude     Anthropic Claude" },
+    { id: "copilot", label: "copilot    GitHub Copilot" },
+  ];
+
+  console.log("Choose a provider:\n");
+
+  const renderList = (selected: number, firstRender: boolean) => {
+    if (!firstRender) {
+      stdout.write(`\x1b[${providers.length + 1}A`);
+    }
+    for (let i = 0; i < providers.length; i++) {
+      const p = providers[i]!;
+      if (i === selected) {
+        stdout.write(`\r\x1b[K  \x1b[36m\x1b[1m> ${p.label}\x1b[0m\n`);
+      } else {
+        stdout.write(`\r\x1b[K    ${p.label}\n`);
+      }
+    }
+    stdout.write(`\r\x1b[K\x1b[2m  ↑↓ navigate  Enter select\x1b[0m\n`);
+  };
+
+  return new Promise<"codex" | "claude" | "copilot">((resolve, reject) => {
+    let selected = 0;
+    renderList(selected, true);
+
+    emitKeypressEvents(stdin);
+    stdin.setRawMode(true);
+    stdin.resume();
+
+    const cleanup = () => {
+      stdin.setRawMode(false);
+      stdin.pause();
+      stdin.removeListener("keypress", onKeypress);
+    };
+
+    const onKeypress = (_str: string, key: Key) => {
+      if (key.name === "up") {
+        selected = Math.max(0, selected - 1);
+        renderList(selected, false);
+      } else if (key.name === "down") {
+        selected = Math.min(providers.length - 1, selected + 1);
+        renderList(selected, false);
+      } else if (key.name === "return") {
+        cleanup();
+        stdout.write("\n");
+        resolve(providers[selected]!.id);
+      } else if (key.ctrl && key.name === "c") {
+        cleanup();
+        stdout.write("\n");
+        reject(new Error("Cancelled."));
+      }
+    };
+
+    stdin.on("keypress", onKeypress);
   });
 }
 
