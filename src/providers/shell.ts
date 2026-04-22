@@ -1,6 +1,3 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import path from "node:path";
 import { spawn } from "node:child_process";
 
 export async function isCommandAvailable(command: string): Promise<boolean> {
@@ -56,32 +53,6 @@ export async function runCommand(options: {
       resolve({ stdout, stderr });
     });
   });
-}
-
-export async function runCodexPrompt(prompt: string): Promise<string> {
-  const tempDirectory = await mkdtemp(path.join(tmpdir(), "first-impressions-codex-"));
-  const outputPath = path.join(tempDirectory, "last-message.txt");
-
-  try {
-    await runCommand({
-      command: "codex",
-      args: [
-        "exec",
-        "--ephemeral",
-        "--skip-git-repo-check",
-        "--sandbox",
-        "read-only",
-        "--output-last-message",
-        outputPath,
-        prompt,
-      ],
-      timeoutMs: 180000,
-    });
-
-    return await readFile(outputPath, "utf8");
-  } finally {
-    await rm(tempDirectory, { recursive: true, force: true });
-  }
 }
 
 export function extractJsonObject(raw: string): string {
