@@ -1,0 +1,24 @@
+{
+  "id": "persona-077",
+  "name": "Leo",
+  "ageBand": "midlife",
+  "sex": "male",
+  "industry": "retail",
+  "domain": "productivity",
+  "roleFamily": "student",
+  "regionGroup": "asia_pacific",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "intuitive",
+  "skepticismLevel": "medium",
+  "toneBaseline": "curious",
+  "archetype": "career climber",
+  "lifeStage": "mid_career",
+  "summary": "Leo is a midlife student in retail who is career climber and tends to make intuitive decisions.",
+  "tags": [
+    "retail",
+    "productivity",
+    "midlife",
+    "student"
+  ]
+}

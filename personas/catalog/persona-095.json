@@ -1,0 +1,24 @@
+{
+  "id": "persona-095",
+  "name": "Omar",
+  "ageBand": "senior",
+  "sex": "male",
+  "industry": "professional_services",
+  "domain": "food",
+  "roleFamily": "student",
+  "regionGroup": "latin_america",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "social_proof",
+  "skepticismLevel": "medium",
+  "toneBaseline": "curious",
+  "archetype": "budget-conscious shopper",
+  "lifeStage": "grandparent",
+  "summary": "Omar is a senior student in professional services who is budget-conscious shopper and tends to make social proof decisions.",
+  "tags": [
+    "professional_services",
+    "food",
+    "senior",
+    "student"
+  ]
+}

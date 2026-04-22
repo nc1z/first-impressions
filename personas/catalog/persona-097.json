@@ -1,0 +1,24 @@
+{
+  "id": "persona-097",
+  "name": "Diego",
+  "ageBand": "senior",
+  "sex": "female",
+  "industry": "consumer_tech",
+  "domain": "productivity",
+  "roleFamily": "student",
+  "regionGroup": "asia_pacific",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "intuitive",
+  "skepticismLevel": "low",
+  "toneBaseline": "warm",
+  "archetype": "busy planner",
+  "lifeStage": "retired",
+  "summary": "Diego is a senior student in consumer tech who is busy planner and tends to make intuitive decisions.",
+  "tags": [
+    "consumer_tech",
+    "productivity",
+    "senior",
+    "student"
+  ]
+}

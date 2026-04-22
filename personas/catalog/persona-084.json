@@ -1,0 +1,24 @@
+{
+  "id": "persona-084",
+  "name": "Ezra",
+  "ageBand": "midlife",
+  "sex": "unspecified",
+  "industry": "manufacturing",
+  "domain": "community",
+  "roleFamily": "creator",
+  "regionGroup": "europe",
+  "techFamiliarity": "medium",
+  "spendingStyle": "premium_sensitive",
+  "decisionStyle": "risk_averse",
+  "skepticismLevel": "high",
+  "toneBaseline": "blunt",
+  "archetype": "family-centered decision maker",
+  "lifeStage": "small_business_owner",
+  "summary": "Ezra is a midlife creator in manufacturing who is family-centered decision maker and tends to make risk averse decisions.",
+  "tags": [
+    "manufacturing",
+    "community",
+    "midlife",
+    "creator"
+  ]
+}

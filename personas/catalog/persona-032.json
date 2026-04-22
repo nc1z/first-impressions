@@ -1,0 +1,24 @@
+{
+  "id": "persona-032",
+  "name": "Amelia",
+  "ageBand": "young_adult",
+  "sex": "male",
+  "industry": "hospitality",
+  "domain": "community",
+  "roleFamily": "creator",
+  "regionGroup": "asia_pacific",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "risk_averse",
+  "skepticismLevel": "medium",
+  "toneBaseline": "practical",
+  "archetype": "trust-first skeptic",
+  "lifeStage": "young_parent",
+  "summary": "Amelia is a young adult creator in hospitality who is trust-first skeptic and tends to make risk averse decisions.",
+  "tags": [
+    "hospitality",
+    "community",
+    "young_adult",
+    "creator"
+  ]
+}

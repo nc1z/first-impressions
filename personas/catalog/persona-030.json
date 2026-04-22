@@ -1,0 +1,24 @@
+{
+  "id": "persona-030",
+  "name": "Isabella",
+  "ageBand": "young_adult",
+  "sex": "unspecified",
+  "industry": "media",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "latin_america",
+  "techFamiliarity": "medium",
+  "spendingStyle": "premium_sensitive",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "high",
+  "toneBaseline": "blunt",
+  "archetype": "trend-aware browser",
+  "lifeStage": "early_career",
+  "summary": "Isabella is a young adult creator in media who is trend-aware browser and tends to make deliberate decisions.",
+  "tags": [
+    "media",
+    "wellness",
+    "young_adult",
+    "creator"
+  ]
+}

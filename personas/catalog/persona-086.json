@@ -1,0 +1,24 @@
+{
+  "id": "persona-086",
+  "name": "Sadie",
+  "ageBand": "midlife",
+  "sex": "male",
+  "industry": "education",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "north_america",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "medium",
+  "toneBaseline": "practical",
+  "archetype": "late majority pragmatist",
+  "lifeStage": "caregiver",
+  "summary": "Sadie is a midlife creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "tags": [
+    "education",
+    "wellness",
+    "midlife",
+    "creator"
+  ]
+}

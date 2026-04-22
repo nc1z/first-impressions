@@ -1,0 +1,24 @@
+{
+  "id": "persona-098",
+  "name": "Lucia",
+  "ageBand": "senior",
+  "sex": "male",
+  "industry": "education",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "africa_middle_east",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "medium",
+  "toneBaseline": "practical",
+  "archetype": "late majority pragmatist",
+  "lifeStage": "consulting",
+  "summary": "Lucia is a senior creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "tags": [
+    "education",
+    "wellness",
+    "senior",
+    "creator"
+  ]
+}

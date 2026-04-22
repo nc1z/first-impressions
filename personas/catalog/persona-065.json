@@ -1,0 +1,24 @@
+{
+  "id": "persona-065",
+  "name": "Layla",
+  "ageBand": "adult",
+  "sex": "male",
+  "industry": "retail",
+  "domain": "productivity",
+  "roleFamily": "student",
+  "regionGroup": "latin_america",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "intuitive",
+  "skepticismLevel": "medium",
+  "toneBaseline": "curious",
+  "archetype": "career climber",
+  "lifeStage": "career_building",
+  "summary": "Layla is a adult student in retail who is career climber and tends to make intuitive decisions.",
+  "tags": [
+    "retail",
+    "productivity",
+    "adult",
+    "student"
+  ]
+}

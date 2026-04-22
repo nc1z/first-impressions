@@ -1,0 +1,24 @@
+{
+  "id": "persona-028",
+  "name": "Lucas",
+  "ageBand": "young_adult",
+  "sex": "female",
+  "industry": "finance",
+  "domain": "community",
+  "roleFamily": "creator",
+  "regionGroup": "africa_middle_east",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "risk_averse",
+  "skepticismLevel": "low",
+  "toneBaseline": "skeptical",
+  "archetype": "detail-focused evaluator",
+  "lifeStage": "young_parent",
+  "summary": "Lucas is a young adult creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "tags": [
+    "finance",
+    "community",
+    "young_adult",
+    "creator"
+  ]
+}

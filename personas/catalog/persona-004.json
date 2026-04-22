@@ -1,0 +1,24 @@
+{
+  "id": "persona-004",
+  "name": "Morgan",
+  "ageBand": "teen",
+  "sex": "female",
+  "industry": "finance",
+  "domain": "community",
+  "roleFamily": "creator",
+  "regionGroup": "europe",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "risk_averse",
+  "skepticismLevel": "low",
+  "toneBaseline": "skeptical",
+  "archetype": "detail-focused evaluator",
+  "lifeStage": "college_bound",
+  "summary": "Morgan is a teen creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "tags": [
+    "finance",
+    "community",
+    "teen",
+    "creator"
+  ]
+}

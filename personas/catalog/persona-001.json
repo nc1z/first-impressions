@@ -1,0 +1,24 @@
+{
+  "id": "persona-001",
+  "name": "Alex",
+  "ageBand": "teen",
+  "sex": "female",
+  "industry": "consumer_tech",
+  "domain": "productivity",
+  "roleFamily": "student",
+  "regionGroup": "north_america",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "intuitive",
+  "skepticismLevel": "low",
+  "toneBaseline": "warm",
+  "archetype": "busy planner",
+  "lifeStage": "secondary_student",
+  "summary": "Alex is a teen student in consumer tech who is busy planner and tends to make intuitive decisions.",
+  "tags": [
+    "consumer_tech",
+    "productivity",
+    "teen",
+    "student"
+  ]
+}

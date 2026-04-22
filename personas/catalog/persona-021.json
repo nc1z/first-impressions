@@ -1,0 +1,24 @@
+{
+  "id": "persona-021",
+  "name": "Mia",
+  "ageBand": "young_adult",
+  "sex": "unspecified",
+  "industry": "public_sector",
+  "domain": "productivity",
+  "roleFamily": "student",
+  "regionGroup": "north_america",
+  "techFamiliarity": "medium",
+  "spendingStyle": "premium_sensitive",
+  "decisionStyle": "intuitive",
+  "skepticismLevel": "high",
+  "toneBaseline": "optimistic",
+  "archetype": "community-minded adopter",
+  "lifeStage": "student",
+  "summary": "Mia is a young adult student in public sector who is community-minded adopter and tends to make intuitive decisions.",
+  "tags": [
+    "public_sector",
+    "productivity",
+    "young_adult",
+    "student"
+  ]
+}

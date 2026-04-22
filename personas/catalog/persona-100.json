@@ -1,0 +1,24 @@
+{
+  "id": "persona-100",
+  "name": "Sana",
+  "ageBand": "senior",
+  "sex": "female",
+  "industry": "finance",
+  "domain": "community",
+  "roleFamily": "creator",
+  "regionGroup": "latin_america",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "risk_averse",
+  "skepticismLevel": "low",
+  "toneBaseline": "skeptical",
+  "archetype": "detail-focused evaluator",
+  "lifeStage": "community_volunteer",
+  "summary": "Sana is a senior creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "tags": [
+    "finance",
+    "community",
+    "senior",
+    "creator"
+  ]
+}

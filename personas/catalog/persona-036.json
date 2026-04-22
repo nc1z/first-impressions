@@ -1,0 +1,24 @@
+{
+  "id": "persona-036",
+  "name": "Benjamin",
+  "ageBand": "adult",
+  "sex": "unspecified",
+  "industry": "manufacturing",
+  "domain": "community",
+  "roleFamily": "creator",
+  "regionGroup": "north_america",
+  "techFamiliarity": "medium",
+  "spendingStyle": "premium_sensitive",
+  "decisionStyle": "risk_averse",
+  "skepticismLevel": "high",
+  "toneBaseline": "blunt",
+  "archetype": "family-centered decision maker",
+  "lifeStage": "independent_professional",
+  "summary": "Benjamin is a adult creator in manufacturing who is family-centered decision maker and tends to make risk averse decisions.",
+  "tags": [
+    "manufacturing",
+    "community",
+    "adult",
+    "creator"
+  ]
+}

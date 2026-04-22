@@ -1,0 +1,24 @@
+{
+  "id": "persona-002",
+  "name": "Jordan",
+  "ageBand": "teen",
+  "sex": "male",
+  "industry": "education",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "asia_pacific",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "medium",
+  "toneBaseline": "practical",
+  "archetype": "late majority pragmatist",
+  "lifeStage": "college_bound",
+  "summary": "Jordan is a teen creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "tags": [
+    "education",
+    "wellness",
+    "teen",
+    "creator"
+  ]
+}

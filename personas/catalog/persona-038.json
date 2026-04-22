@@ -1,0 +1,24 @@
+{
+  "id": "persona-038",
+  "name": "Aria",
+  "ageBand": "adult",
+  "sex": "male",
+  "industry": "education",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "africa_middle_east",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "medium",
+  "toneBaseline": "practical",
+  "archetype": "late majority pragmatist",
+  "lifeStage": "parent",
+  "summary": "Aria is a adult creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "tags": [
+    "education",
+    "wellness",
+    "adult",
+    "creator"
+  ]
+}

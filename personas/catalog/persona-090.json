@@ -1,0 +1,24 @@
+{
+  "id": "persona-090",
+  "name": "Sarah",
+  "ageBand": "midlife",
+  "sex": "unspecified",
+  "industry": "media",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "latin_america",
+  "techFamiliarity": "medium",
+  "spendingStyle": "premium_sensitive",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "high",
+  "toneBaseline": "blunt",
+  "archetype": "trend-aware browser",
+  "lifeStage": "caregiver",
+  "summary": "Sarah is a midlife creator in media who is trend-aware browser and tends to make deliberate decisions.",
+  "tags": [
+    "media",
+    "wellness",
+    "midlife",
+    "creator"
+  ]
+}

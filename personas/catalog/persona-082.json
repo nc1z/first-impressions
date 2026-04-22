@@ -1,0 +1,24 @@
+{
+  "id": "persona-082",
+  "name": "Silas",
+  "ageBand": "midlife",
+  "sex": "female",
+  "industry": "creator_economy",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "asia_pacific",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "low",
+  "toneBaseline": "skeptical",
+  "archetype": "local-first supporter",
+  "lifeStage": "caregiver",
+  "summary": "Silas is a midlife creator in creator economy who is local-first supporter and tends to make deliberate decisions.",
+  "tags": [
+    "creator_economy",
+    "wellness",
+    "midlife",
+    "creator"
+  ]
+}

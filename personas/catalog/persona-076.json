@@ -1,0 +1,24 @@
+{
+  "id": "persona-076",
+  "name": "Hazel",
+  "ageBand": "midlife",
+  "sex": "female",
+  "industry": "finance",
+  "domain": "community",
+  "roleFamily": "creator",
+  "regionGroup": "north_america",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "risk_averse",
+  "skepticismLevel": "low",
+  "toneBaseline": "skeptical",
+  "archetype": "detail-focused evaluator",
+  "lifeStage": "small_business_owner",
+  "summary": "Hazel is a midlife creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "tags": [
+    "finance",
+    "community",
+    "midlife",
+    "creator"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "persona-089",
+  "name": "Jade",
+  "ageBand": "midlife",
+  "sex": "male",
+  "industry": "retail",
+  "domain": "productivity",
+  "roleFamily": "student",
+  "regionGroup": "europe",
+  "techFamiliarity": "high",
+  "spendingStyle": "balanced",
+  "decisionStyle": "intuitive",
+  "skepticismLevel": "medium",
+  "toneBaseline": "curious",
+  "archetype": "career climber",
+  "lifeStage": "mid_career",
+  "summary": "Jade is a midlife student in retail who is career climber and tends to make intuitive decisions.",
+  "tags": [
+    "retail",
+    "productivity",
+    "midlife",
+    "student"
+  ]
+}

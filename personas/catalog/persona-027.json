@@ -1,0 +1,24 @@
+{
+  "id": "persona-027",
+  "name": "Sophia",
+  "ageBand": "young_adult",
+  "sex": "unspecified",
+  "industry": "healthcare",
+  "domain": "food",
+  "roleFamily": "student",
+  "regionGroup": "asia_pacific",
+  "techFamiliarity": "medium",
+  "spendingStyle": "premium_sensitive",
+  "decisionStyle": "social_proof",
+  "skepticismLevel": "high",
+  "toneBaseline": "optimistic",
+  "archetype": "efficiency seeker",
+  "lifeStage": "first_job",
+  "summary": "Sophia is a young adult student in healthcare who is efficiency seeker and tends to make social proof decisions.",
+  "tags": [
+    "healthcare",
+    "food",
+    "young_adult",
+    "student"
+  ]
+}

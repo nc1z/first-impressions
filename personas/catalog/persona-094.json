@@ -1,0 +1,24 @@
+{
+  "id": "persona-094",
+  "name": "Nina",
+  "ageBand": "senior",
+  "sex": "female",
+  "industry": "creator_economy",
+  "domain": "wellness",
+  "roleFamily": "creator",
+  "regionGroup": "europe",
+  "techFamiliarity": "low",
+  "spendingStyle": "frugal",
+  "decisionStyle": "deliberate",
+  "skepticismLevel": "low",
+  "toneBaseline": "skeptical",
+  "archetype": "local-first supporter",
+  "lifeStage": "consulting",
+  "summary": "Nina is a senior creator in creator economy who is local-first supporter and tends to make deliberate decisions.",
+  "tags": [
+    "creator_economy",
+    "wellness",
+    "senior",
+    "creator"
+  ]
+}
