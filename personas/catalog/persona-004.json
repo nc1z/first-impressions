@@ -1,6 +1,6 @@
 {
   "id": "persona-004",
-  "name": "Morgan",
+  "name": "Camille",
   "ageBand": "teen",
   "sex": "female",
   "industry": "finance",
@@ -14,7 +14,7 @@
   "toneBaseline": "skeptical",
   "archetype": "detail-focused evaluator",
   "lifeStage": "college_bound",
-  "summary": "Morgan is a teen creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "summary": "Camille is a teen creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
   "tags": [
     "finance",
     "community",

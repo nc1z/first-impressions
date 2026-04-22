@@ -1,6 +1,6 @@
 {
   "id": "persona-029",
-  "name": "Mason",
+  "name": "Antoine",
   "ageBand": "young_adult",
   "sex": "male",
   "industry": "retail",
@@ -14,7 +14,7 @@
   "toneBaseline": "curious",
   "archetype": "career climber",
   "lifeStage": "student",
-  "summary": "Mason is a young adult student in retail who is career climber and tends to make intuitive decisions.",
+  "summary": "Antoine is a young adult student in retail who is career climber and tends to make intuitive decisions.",
   "tags": [
     "retail",
     "productivity",

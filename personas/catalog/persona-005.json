@@ -1,6 +1,6 @@
 {
   "id": "persona-005",
-  "name": "Casey",
+  "name": "Carlos",
   "ageBand": "teen",
   "sex": "male",
   "industry": "retail",
@@ -14,7 +14,7 @@
   "toneBaseline": "curious",
   "archetype": "career climber",
   "lifeStage": "secondary_student",
-  "summary": "Casey is a teen student in retail who is career climber and tends to make intuitive decisions.",
+  "summary": "Carlos is a teen student in retail who is career climber and tends to make intuitive decisions.",
   "tags": [
     "retail",
     "productivity",

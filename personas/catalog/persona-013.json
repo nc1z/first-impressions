@@ -1,6 +1,6 @@
 {
   "id": "persona-013",
-  "name": "Harper",
+  "name": "Fatima",
   "ageBand": "young_adult",
   "sex": "female",
   "industry": "consumer_tech",
@@ -14,7 +14,7 @@
   "toneBaseline": "warm",
   "archetype": "busy planner",
   "lifeStage": "student",
-  "summary": "Harper is a young adult student in consumer tech who is busy planner and tends to make intuitive decisions.",
+  "summary": "Fatima is a young adult student in consumer tech who is busy planner and tends to make intuitive decisions.",
   "tags": [
     "consumer_tech",
     "productivity",

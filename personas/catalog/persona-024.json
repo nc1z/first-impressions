@@ -1,6 +1,6 @@
 {
   "id": "persona-024",
-  "name": "Emma",
+  "name": "Klaus",
   "ageBand": "young_adult",
   "sex": "unspecified",
   "industry": "manufacturing",
@@ -14,7 +14,7 @@
   "toneBaseline": "blunt",
   "archetype": "family-centered decision maker",
   "lifeStage": "young_parent",
-  "summary": "Emma is a young adult creator in manufacturing who is family-centered decision maker and tends to make risk averse decisions.",
+  "summary": "Klaus is a young adult creator in manufacturing who is family-centered decision maker and tends to make risk averse decisions.",
   "tags": [
     "manufacturing",
     "community",
