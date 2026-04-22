@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "unspecified",
   "industry": "public_sector",
-  "domain": "productivity",
+  "domain": "community",
   "roleFamily": "student",
   "regionGroup": "europe",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "optimistic",
   "archetype": "community-minded adopter",
   "lifeStage": "career_building",
-  "summary": "Hendrik is a adult student in public sector who is community-minded adopter and tends to make intuitive decisions.",
+  "summary": "Hendrik is a career builder in the public sector — community-minded adopter with a optimistic baseline and intuitive decision-making.",
   "tags": [
     "public_sector",
-    "productivity",
     "adult",
-    "student"
+    "student",
+    "community"
   ]
 }

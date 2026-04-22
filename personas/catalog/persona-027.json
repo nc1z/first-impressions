@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "unspecified",
   "industry": "healthcare",
-  "domain": "food",
+  "domain": "fitness",
   "roleFamily": "student",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "optimistic",
   "archetype": "efficiency seeker",
   "lifeStage": "first_job",
-  "summary": "Anh is a young adult student in healthcare who is efficiency seeker and tends to make social proof decisions.",
+  "summary": "Anh is a new professional in healthcare — efficiency seeker with a optimistic baseline and social proof decision-making.",
   "tags": [
     "healthcare",
-    "food",
     "young_adult",
-    "student"
+    "student",
+    "fitness"
   ]
 }

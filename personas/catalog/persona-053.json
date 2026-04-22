@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "male",
   "industry": "retail",
-  "domain": "productivity",
+  "domain": "entertainment",
   "roleFamily": "student",
   "regionGroup": "africa_middle_east",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "curious",
   "archetype": "career climber",
   "lifeStage": "career_building",
-  "summary": "Mustafa is a adult student in retail who is career climber and tends to make intuitive decisions.",
+  "summary": "Mustafa is a career builder in retail — career climber with a curious baseline and intuitive decision-making.",
   "tags": [
     "retail",
-    "productivity",
     "adult",
-    "student"
+    "student",
+    "entertainment"
   ]
 }

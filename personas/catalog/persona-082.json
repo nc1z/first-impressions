@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "female",
   "industry": "creator_economy",
-  "domain": "wellness",
+  "domain": "health_tech",
   "roleFamily": "creator",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "skeptical",
   "archetype": "local-first supporter",
   "lifeStage": "caregiver",
-  "summary": "Hana is a midlife creator in creator economy who is local-first supporter and tends to make deliberate decisions.",
+  "summary": "Hana is a caregiver in the creator economy — local-first supporter with a skeptical baseline and deliberate decision-making.",
   "tags": [
     "creator_economy",
-    "wellness",
     "midlife",
-    "creator"
+    "creator",
+    "health_tech"
   ]
 }

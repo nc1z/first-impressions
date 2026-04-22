@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "male",
   "industry": "hospitality",
-  "domain": "community",
+  "domain": "wellness",
   "roleFamily": "creator",
   "regionGroup": "africa_middle_east",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "practical",
   "archetype": "trust-first skeptic",
   "lifeStage": "young_parent",
-  "summary": "Kwame is a young adult creator in hospitality who is trust-first skeptic and tends to make risk averse decisions.",
+  "summary": "Kwame is a young parent in hospitality — trust-first skeptic with a practical baseline and risk averse decision-making.",
   "tags": [
     "hospitality",
-    "community",
     "young_adult",
-    "creator"
+    "creator",
+    "wellness"
   ]
 }

@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "male",
   "industry": "retail",
-  "domain": "productivity",
+  "domain": "fashion",
   "roleFamily": "student",
   "regionGroup": "latin_america",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "curious",
   "archetype": "career climber",
   "lifeStage": "career_building",
-  "summary": "Tomás is a adult student in retail who is career climber and tends to make intuitive decisions.",
+  "summary": "Tomás is a career builder in retail — career climber with a curious baseline and intuitive decision-making.",
   "tags": [
     "retail",
-    "productivity",
     "adult",
-    "student"
+    "student",
+    "fashion"
   ]
 }

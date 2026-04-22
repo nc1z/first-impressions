@@ -4,7 +4,7 @@
   "ageBand": "senior",
   "sex": "unspecified",
   "industry": "healthcare",
-  "domain": "food",
+  "domain": "community",
   "roleFamily": "student",
   "regionGroup": "europe",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "optimistic",
   "archetype": "efficiency seeker",
   "lifeStage": "grandparent",
-  "summary": "Tomasz is a senior student in healthcare who is efficiency seeker and tends to make social proof decisions.",
+  "summary": "Tomasz is a grandparent in healthcare — efficiency seeker with a optimistic baseline and social proof decision-making.",
   "tags": [
     "healthcare",
-    "food",
     "senior",
-    "student"
+    "student",
+    "community"
   ]
 }

@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "female",
   "industry": "consumer_tech",
-  "domain": "productivity",
+  "domain": "health_tech",
   "roleFamily": "student",
   "regionGroup": "latin_america",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "warm",
   "archetype": "busy planner",
   "lifeStage": "mid_career",
-  "summary": "Isabela is a midlife student in consumer tech who is busy planner and tends to make intuitive decisions.",
+  "summary": "Isabela is a mid-career professional in consumer tech — busy planner with a warm baseline and intuitive decision-making.",
   "tags": [
     "consumer_tech",
-    "productivity",
     "midlife",
-    "student"
+    "student",
+    "health_tech"
   ]
 }

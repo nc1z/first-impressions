@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "female",
   "industry": "logistics",
-  "domain": "food",
+  "domain": "home_living",
   "roleFamily": "student",
   "regionGroup": "latin_america",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "warm",
   "archetype": "early adopter",
   "lifeStage": "household_manager",
-  "summary": "Mariana is a adult student in logistics who is early adopter and tends to make social proof decisions.",
+  "summary": "Mariana is a household manager in logistics — early adopter with a warm baseline and social proof decision-making.",
   "tags": [
     "logistics",
-    "food",
     "adult",
-    "student"
+    "student",
+    "home_living"
   ]
 }

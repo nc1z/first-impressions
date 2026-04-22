@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "male",
   "industry": "retail",
-  "domain": "productivity",
+  "domain": "food",
   "roleFamily": "student",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "curious",
   "archetype": "career climber",
   "lifeStage": "mid_career",
-  "summary": "Ryo is a midlife student in retail who is career climber and tends to make intuitive decisions.",
+  "summary": "Ryo is a mid-career professional in retail — career climber with a curious baseline and intuitive decision-making.",
   "tags": [
     "retail",
-    "productivity",
     "midlife",
-    "student"
+    "student",
+    "food"
   ]
 }

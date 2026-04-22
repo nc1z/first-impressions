@@ -1,4 +1,5 @@
 import type { AggregatedInsights, FeaturedQuote, PersonaReaction, RunPersona } from "./domain/types.js";
+import { describePersona } from "./personas.js";
 
 export function aggregateInsights(personas: RunPersona[], responses: PersonaReaction[]): AggregatedInsights {
   const successful = responses.filter((response) => !response.error);
@@ -32,6 +33,7 @@ export function aggregateInsights(personas: RunPersona[], responses: PersonaReac
         name: persona?.seed.name ?? r.personaId,
         ageBand: persona?.seed.ageBand ?? "",
         domain: persona?.seed.domain ?? "",
+        description: persona ? describePersona(persona.seed) : "",
         score: r.reactionScore,
         quote: r.shortReaction,
         sentiment,

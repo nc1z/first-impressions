@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "female",
   "industry": "creator_economy",
-  "domain": "wellness",
+  "domain": "gaming",
   "roleFamily": "creator",
   "regionGroup": "north_america",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "skeptical",
   "archetype": "local-first supporter",
   "lifeStage": "parent",
-  "summary": "Leah is a adult creator in creator economy who is local-first supporter and tends to make deliberate decisions.",
+  "summary": "Leah is a parent in the creator economy — local-first supporter with a skeptical baseline and deliberate decision-making.",
   "tags": [
     "creator_economy",
-    "wellness",
     "adult",
-    "creator"
+    "creator",
+    "gaming"
   ]
 }

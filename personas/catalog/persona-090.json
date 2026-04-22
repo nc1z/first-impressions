@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "unspecified",
   "industry": "media",
-  "domain": "wellness",
+  "domain": "health_tech",
   "roleFamily": "creator",
   "regionGroup": "latin_america",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "blunt",
   "archetype": "trend-aware browser",
   "lifeStage": "caregiver",
-  "summary": "Lucía is a midlife creator in media who is trend-aware browser and tends to make deliberate decisions.",
+  "summary": "Lucía is a caregiver in media — trend-aware browser with a blunt baseline and deliberate decision-making.",
   "tags": [
     "media",
-    "wellness",
     "midlife",
-    "creator"
+    "creator",
+    "health_tech"
   ]
 }

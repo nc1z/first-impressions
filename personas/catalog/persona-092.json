@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "male",
   "industry": "hospitality",
-  "domain": "community",
+  "domain": "finance",
   "roleFamily": "creator",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "practical",
   "archetype": "trust-first skeptic",
   "lifeStage": "small_business_owner",
-  "summary": "Seo-Jun is a midlife creator in hospitality who is trust-first skeptic and tends to make risk averse decisions.",
+  "summary": "Seo-Jun is a small business owner in hospitality — trust-first skeptic with a practical baseline and risk averse decision-making.",
   "tags": [
     "hospitality",
-    "community",
     "midlife",
-    "creator"
+    "creator",
+    "finance"
   ]
 }

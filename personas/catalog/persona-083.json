@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "male",
   "industry": "professional_services",
-  "domain": "food",
+  "domain": "productivity",
   "roleFamily": "student",
   "regionGroup": "africa_middle_east",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "curious",
   "archetype": "budget-conscious shopper",
   "lifeStage": "team_lead",
-  "summary": "Ibrahim is a midlife student in professional services who is budget-conscious shopper and tends to make social proof decisions.",
+  "summary": "Ibrahim is a team lead in professional services — budget-conscious shopper with a curious baseline and social proof decision-making.",
   "tags": [
     "professional_services",
-    "food",
     "midlife",
-    "student"
+    "student",
+    "productivity"
   ]
 }

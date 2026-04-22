@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "female",
   "industry": "finance",
-  "domain": "community",
+  "domain": "wellness",
   "roleFamily": "creator",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "low",
@@ -14,11 +14,10 @@
   "toneBaseline": "skeptical",
   "archetype": "detail-focused evaluator",
   "lifeStage": "independent_professional",
-  "summary": "Linh is a adult creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "summary": "Linh is a independent professional in finance — detail-focused evaluator with a skeptical baseline and risk averse decision-making.",
   "tags": [
-    "finance",
-    "community",
     "adult",
-    "creator"
+    "creator",
+    "wellness"
   ]
 }

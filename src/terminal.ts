@@ -1,4 +1,5 @@
 import type { IdeaBrief, PersonaReaction, RunPersona } from "./domain/types.js";
+import { describePersona } from "./personas.js";
 
 const colors = {
   reset: "\u001b[0m",
@@ -203,7 +204,7 @@ function formatReactionSample(persona: RunPersona, reaction: PersonaReaction): s
 
   return [
     paint("bold", persona.seed.name),
-    paint("dim", `${persona.seed.ageBand}/${persona.seed.domain}`),
+    paint("dim", describePersona(persona.seed)),
     paint(scoreColor, score),
     blurb,
   ].join("  ");

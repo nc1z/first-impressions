@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "male",
   "industry": "education",
-  "domain": "wellness",
+  "domain": "community",
   "roleFamily": "creator",
   "regionGroup": "europe",
   "techFamiliarity": "high",
@@ -14,11 +14,10 @@
   "toneBaseline": "practical",
   "archetype": "late majority pragmatist",
   "lifeStage": "parent",
-  "summary": "Pablo is a adult creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "summary": "Pablo is a parent in education — late majority pragmatist with a practical baseline and deliberate decision-making.",
   "tags": [
-    "education",
-    "wellness",
     "adult",
-    "creator"
+    "creator",
+    "community"
   ]
 }

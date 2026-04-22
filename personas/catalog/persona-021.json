@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "unspecified",
   "industry": "public_sector",
-  "domain": "productivity",
+  "domain": "education",
   "roleFamily": "student",
   "regionGroup": "north_america",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "optimistic",
   "archetype": "community-minded adopter",
   "lifeStage": "student",
-  "summary": "Mia is a young adult student in public sector who is community-minded adopter and tends to make intuitive decisions.",
+  "summary": "Mia is a student in the public sector — community-minded adopter with a optimistic baseline and intuitive decision-making.",
   "tags": [
     "public_sector",
-    "productivity",
     "young_adult",
-    "student"
+    "student",
+    "education"
   ]
 }

@@ -4,7 +4,7 @@
   "ageBand": "teen",
   "sex": "female",
   "industry": "finance",
-  "domain": "community",
+  "domain": "social",
   "roleFamily": "creator",
   "regionGroup": "europe",
   "techFamiliarity": "low",
@@ -14,11 +14,10 @@
   "toneBaseline": "skeptical",
   "archetype": "detail-focused evaluator",
   "lifeStage": "college_bound",
-  "summary": "Camille is a teen creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "summary": "Camille is a college student in finance — detail-focused evaluator with a skeptical baseline and risk averse decision-making.",
   "tags": [
-    "finance",
-    "community",
     "teen",
-    "creator"
+    "creator",
+    "social"
   ]
 }

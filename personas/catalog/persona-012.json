@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "unspecified",
   "industry": "manufacturing",
-  "domain": "community",
+  "domain": "wellness",
   "roleFamily": "creator",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "blunt",
   "archetype": "family-centered decision maker",
   "lifeStage": "young_parent",
-  "summary": "Arjun is a young adult creator in manufacturing who is family-centered decision maker and tends to make risk averse decisions.",
+  "summary": "Arjun is a young parent in manufacturing — family-centered decision maker with a blunt baseline and risk averse decision-making.",
   "tags": [
     "manufacturing",
-    "community",
     "young_adult",
-    "creator"
+    "creator",
+    "wellness"
   ]
 }

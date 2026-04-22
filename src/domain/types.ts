@@ -89,6 +89,7 @@ export interface FeaturedQuote {
   name: string;
   ageBand: string;
   domain: string;
+  description: string;
   score: number;
   quote: string;
   sentiment: "positive" | "neutral" | "negative";

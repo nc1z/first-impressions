@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "female",
   "industry": "consumer_tech",
-  "domain": "productivity",
+  "domain": "education",
   "roleFamily": "student",
   "regionGroup": "latin_america",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "warm",
   "archetype": "busy planner",
   "lifeStage": "student",
-  "summary": "Camila is a young adult student in consumer tech who is busy planner and tends to make intuitive decisions.",
+  "summary": "Camila is a student in consumer tech — busy planner with a warm baseline and intuitive decision-making.",
   "tags": [
     "consumer_tech",
-    "productivity",
     "young_adult",
-    "student"
+    "student",
+    "education"
   ]
 }

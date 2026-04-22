@@ -345,6 +345,21 @@ function createReportHtml(artifacts: RunArtifacts): string {
   function ageLbl(b) {
     return ({teen:'Teens',young_adult:'18\u201325',adult:'26\u201340',midlife:'41\u201360',senior:'60+'})[b] || b;
   }
+  function personaDesc(seed) {
+    var roleMap = {career_building:'career builder',caregiver:'caregiver',college_bound:'college student',
+      community_volunteer:'community volunteer',consulting:'consultant',early_career:'early-career professional',
+      first_job:'new professional',grandparent:'grandparent',household_manager:'household manager',
+      independent_professional:'independent professional',mid_career:'mid-career professional',parent:'parent',
+      retired:'retiree',secondary_student:'high school student',small_business_owner:'small business owner',
+      student:'student',team_lead:'team lead',young_parent:'young parent'};
+    var indMap = {consumer_tech:'consumer tech',creator_economy:'the creator economy',education:'education',
+      finance:'finance',healthcare:'healthcare',hospitality:'hospitality',logistics:'logistics',
+      manufacturing:'manufacturing',media:'media',professional_services:'professional services',
+      public_sector:'the public sector',retail:'retail'};
+    var role = roleMap[seed.lifeStage] || seed.lifeStage.replace(/_/g,' ');
+    var ind = indMap[seed.industry] || seed.industry.replace(/_/g,' ');
+    return role + ' in ' + ind;
+  }
   function fmt(n) { return String(Math.round(n)); }
 
   // HERO
@@ -434,7 +449,7 @@ function createReportHtml(artifacts: RunArtifacts): string {
         <span class="quote-mark">&#8220;</span>
         <p class="quote-text">\${esc(q.quote)}</p>
         <div class="quote-byline">
-          <span>\${esc(q.name)} &middot; \${ageLbl(q.ageBand)} &middot; \${esc(q.domain)}</span>
+          <span>\${esc(q.name)} &middot; \${esc(q.description)}</span>
           <span class="quote-badge \${cls}">\${q.score}/100</span>
         </div>
       </div>\`;
@@ -481,7 +496,7 @@ function createReportHtml(artifacts: RunArtifacts): string {
       var p = personaById.get(item.personaId);
       var r = responses.find(function (r) { return r.personaId === item.personaId; });
       var name = p ? p.seed.name : item.personaId;
-      var who = p ? (ageLbl(p.seed.ageBand) + ' \u00b7 ' + p.seed.domain) : '';
+      var who = p ? personaDesc(p.seed) : '';
       return \`<div class="profile-card profile-card--\${cls}">
         <div class="profile-name">\${esc(name)}</div>
         <div class="profile-who">\${esc(who)}</div>
@@ -518,7 +533,7 @@ function createReportHtml(artifacts: RunArtifacts): string {
         return \`<tr>
           <td>
             <strong>\${esc(p ? p.seed.name : r.personaId)}</strong>
-            <div style="color:#64748b;font-size:11px;margin-top:2px">\${esc(p ? ageLbl(p.seed.ageBand) + ' \u00b7 ' + p.seed.domain : '')}</div>
+            <div style="color:#64748b;font-size:11px;margin-top:2px">\${esc(p ? personaDesc(p.seed) : '')}</div>
           </td>
           <td><span style="font-weight:800;color:\${sc(r.reactionScore)}">\${r.reactionScore}</span></td>
           <td style="max-width:260px;color:#334155;font-style:italic">\${esc(r.shortReaction)}</td>

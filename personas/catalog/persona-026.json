@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "male",
   "industry": "education",
-  "domain": "wellness",
+  "domain": "career_growth",
   "roleFamily": "creator",
   "regionGroup": "north_america",
   "techFamiliarity": "high",
@@ -14,11 +14,10 @@
   "toneBaseline": "practical",
   "archetype": "late majority pragmatist",
   "lifeStage": "early_career",
-  "summary": "Ava is a young adult creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "summary": "Ava is a early-career professional in education — late majority pragmatist with a practical baseline and deliberate decision-making.",
   "tags": [
-    "education",
-    "wellness",
     "young_adult",
-    "creator"
+    "creator",
+    "career_growth"
   ]
 }

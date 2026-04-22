@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "male",
   "industry": "education",
-  "domain": "wellness",
+  "domain": "health_tech",
   "roleFamily": "creator",
   "regionGroup": "north_america",
   "techFamiliarity": "high",
@@ -14,11 +14,10 @@
   "toneBaseline": "practical",
   "archetype": "late majority pragmatist",
   "lifeStage": "caregiver",
-  "summary": "Sadie is a midlife creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "summary": "Sadie is a caregiver in education — late majority pragmatist with a practical baseline and deliberate decision-making.",
   "tags": [
-    "education",
-    "wellness",
     "midlife",
-    "creator"
+    "creator",
+    "health_tech"
   ]
 }

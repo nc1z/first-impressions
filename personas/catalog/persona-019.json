@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "female",
   "industry": "logistics",
-  "domain": "food",
+  "domain": "travel",
   "roleFamily": "student",
   "regionGroup": "europe",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "warm",
   "archetype": "early adopter",
   "lifeStage": "first_job",
-  "summary": "Ingrid is a young adult student in logistics who is early adopter and tends to make social proof decisions.",
+  "summary": "Ingrid is a new professional in logistics — early adopter with a warm baseline and social proof decision-making.",
   "tags": [
     "logistics",
-    "food",
     "young_adult",
-    "student"
+    "student",
+    "travel"
   ]
 }

@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "unspecified",
   "industry": "healthcare",
-  "domain": "food",
+  "domain": "home_living",
   "roleFamily": "student",
   "regionGroup": "africa_middle_east",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "optimistic",
   "archetype": "efficiency seeker",
   "lifeStage": "household_manager",
-  "summary": "Khalid is a adult student in healthcare who is efficiency seeker and tends to make social proof decisions.",
+  "summary": "Khalid is a household manager in healthcare — efficiency seeker with a optimistic baseline and social proof decision-making.",
   "tags": [
     "healthcare",
-    "food",
     "adult",
-    "student"
+    "student",
+    "home_living"
   ]
 }

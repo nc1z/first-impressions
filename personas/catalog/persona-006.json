@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "unspecified",
   "industry": "media",
-  "domain": "wellness",
+  "domain": "entertainment",
   "roleFamily": "creator",
   "regionGroup": "north_america",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "blunt",
   "archetype": "trend-aware browser",
   "lifeStage": "early_career",
-  "summary": "Avery is a young adult creator in media who is trend-aware browser and tends to make deliberate decisions.",
+  "summary": "Avery is a early-career professional in media — trend-aware browser with a blunt baseline and deliberate decision-making.",
   "tags": [
     "media",
-    "wellness",
     "young_adult",
-    "creator"
+    "creator",
+    "entertainment"
   ]
 }

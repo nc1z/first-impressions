@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "unspecified",
   "industry": "public_sector",
-  "domain": "productivity",
+  "domain": "wellness",
   "roleFamily": "student",
   "regionGroup": "africa_middle_east",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "optimistic",
   "archetype": "community-minded adopter",
   "lifeStage": "mid_career",
-  "summary": "Dalia is a midlife student in public sector who is community-minded adopter and tends to make intuitive decisions.",
+  "summary": "Dalia is a mid-career professional in the public sector — community-minded adopter with a optimistic baseline and intuitive decision-making.",
   "tags": [
     "public_sector",
-    "productivity",
     "midlife",
-    "student"
+    "student",
+    "wellness"
   ]
 }

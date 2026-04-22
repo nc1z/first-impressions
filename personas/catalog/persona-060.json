@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "unspecified",
   "industry": "manufacturing",
-  "domain": "community",
+  "domain": "food",
   "roleFamily": "creator",
   "regionGroup": "latin_america",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "blunt",
   "archetype": "family-centered decision maker",
   "lifeStage": "independent_professional",
-  "summary": "Rafael is a adult creator in manufacturing who is family-centered decision maker and tends to make risk averse decisions.",
+  "summary": "Rafael is a independent professional in manufacturing — family-centered decision maker with a blunt baseline and risk averse decision-making.",
   "tags": [
     "manufacturing",
-    "community",
     "adult",
-    "creator"
+    "creator",
+    "food"
   ]
 }

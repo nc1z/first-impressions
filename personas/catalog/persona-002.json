@@ -4,7 +4,7 @@
   "ageBand": "teen",
   "sex": "male",
   "industry": "education",
-  "domain": "wellness",
+  "domain": "social",
   "roleFamily": "creator",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "high",
@@ -14,11 +14,10 @@
   "toneBaseline": "practical",
   "archetype": "late majority pragmatist",
   "lifeStage": "college_bound",
-  "summary": "Kenji is a teen creator in education who is late majority pragmatist and tends to make deliberate decisions.",
+  "summary": "Kenji is a college student in education — late majority pragmatist with a practical baseline and deliberate decision-making.",
   "tags": [
-    "education",
-    "wellness",
     "teen",
-    "creator"
+    "creator",
+    "social"
   ]
 }

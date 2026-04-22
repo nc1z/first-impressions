@@ -14,6 +14,49 @@ const generalAgeDistribution: Record<AgeBand, number> = {
   senior: 7,
 };
 
+const lifeStageLabels: Record<string, string> = {
+  career_building: "career builder",
+  caregiver: "caregiver",
+  college_bound: "college student",
+  community_volunteer: "community volunteer",
+  consulting: "consultant",
+  early_career: "early-career professional",
+  first_job: "new professional",
+  grandparent: "grandparent",
+  household_manager: "household manager",
+  independent_professional: "independent professional",
+  mid_career: "mid-career professional",
+  parent: "parent",
+  retired: "retiree",
+  secondary_student: "high school student",
+  small_business_owner: "small business owner",
+  student: "student",
+  team_lead: "team lead",
+  young_parent: "young parent",
+};
+
+const industryLabels: Record<string, string> = {
+  consumer_tech: "consumer tech",
+  creator_economy: "the creator economy",
+  education: "education",
+  finance: "finance",
+  healthcare: "healthcare",
+  hospitality: "hospitality",
+  logistics: "logistics",
+  manufacturing: "manufacturing",
+  media: "media",
+  professional_services: "professional services",
+  public_sector: "the public sector",
+  retail: "retail",
+};
+
+/** Returns a short natural-language description of who the persona is, e.g. "small business owner in healthcare" */
+export function describePersona(seed: PersonaSeed): string {
+  const role = lifeStageLabels[seed.lifeStage] ?? seed.lifeStage.replace(/_/g, " ");
+  const industry = industryLabels[seed.industry] ?? seed.industry.replace(/_/g, " ");
+  return `${role} in ${industry}`;
+}
+
 export async function loadPersonaCatalog(): Promise<PersonaSeed[]> {
   return readJsonDirectory<PersonaSeed>(personaCatalogPath);
 }

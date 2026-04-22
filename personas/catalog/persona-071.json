@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "male",
   "industry": "professional_services",
-  "domain": "food",
+  "domain": "home_living",
   "roleFamily": "student",
   "regionGroup": "north_america",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "curious",
   "archetype": "budget-conscious shopper",
   "lifeStage": "household_manager",
-  "summary": "Ruby is a adult student in professional services who is budget-conscious shopper and tends to make social proof decisions.",
+  "summary": "Ruby is a household manager in professional services — budget-conscious shopper with a curious baseline and social proof decision-making.",
   "tags": [
     "professional_services",
-    "food",
     "adult",
-    "student"
+    "student",
+    "home_living"
   ]
 }

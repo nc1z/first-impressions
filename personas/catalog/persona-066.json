@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "unspecified",
   "industry": "media",
-  "domain": "wellness",
+  "domain": "entertainment",
   "roleFamily": "creator",
   "regionGroup": "north_america",
   "techFamiliarity": "medium",
@@ -14,11 +14,11 @@
   "toneBaseline": "blunt",
   "archetype": "trend-aware browser",
   "lifeStage": "parent",
-  "summary": "Aurora is a adult creator in media who is trend-aware browser and tends to make deliberate decisions.",
+  "summary": "Aurora is a parent in media — trend-aware browser with a blunt baseline and deliberate decision-making.",
   "tags": [
     "media",
-    "wellness",
     "adult",
-    "creator"
+    "creator",
+    "entertainment"
   ]
 }

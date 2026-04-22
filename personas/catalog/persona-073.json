@@ -4,7 +4,7 @@
   "ageBand": "adult",
   "sex": "female",
   "industry": "consumer_tech",
-  "domain": "productivity",
+  "domain": "gaming",
   "roleFamily": "student",
   "regionGroup": "africa_middle_east",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "warm",
   "archetype": "busy planner",
   "lifeStage": "career_building",
-  "summary": "Amina is a adult student in consumer tech who is busy planner and tends to make intuitive decisions.",
+  "summary": "Amina is a career builder in consumer tech — busy planner with a warm baseline and intuitive decision-making.",
   "tags": [
     "consumer_tech",
-    "productivity",
     "adult",
-    "student"
+    "student",
+    "gaming"
   ]
 }

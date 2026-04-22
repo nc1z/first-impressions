@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "female",
   "industry": "creator_economy",
-  "domain": "wellness",
+  "domain": "social",
   "roleFamily": "creator",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "skeptical",
   "archetype": "local-first supporter",
   "lifeStage": "early_career",
-  "summary": "Yuki is a young adult creator in creator economy who is local-first supporter and tends to make deliberate decisions.",
+  "summary": "Yuki is a early-career professional in the creator economy — local-first supporter with a skeptical baseline and deliberate decision-making.",
   "tags": [
     "creator_economy",
-    "wellness",
     "young_adult",
-    "creator"
+    "creator",
+    "social"
   ]
 }

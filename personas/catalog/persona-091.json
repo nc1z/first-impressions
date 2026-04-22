@@ -4,7 +4,7 @@
   "ageBand": "midlife",
   "sex": "female",
   "industry": "logistics",
-  "domain": "food",
+  "domain": "career_growth",
   "roleFamily": "student",
   "regionGroup": "north_america",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "warm",
   "archetype": "early adopter",
   "lifeStage": "team_lead",
-  "summary": "Anna is a midlife student in logistics who is early adopter and tends to make social proof decisions.",
+  "summary": "Anna is a team lead in logistics — early adopter with a warm baseline and social proof decision-making.",
   "tags": [
     "logistics",
-    "food",
     "midlife",
-    "student"
+    "student",
+    "career_growth"
   ]
 }

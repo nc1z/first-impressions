@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "male",
   "industry": "retail",
-  "domain": "productivity",
+  "domain": "education",
   "roleFamily": "student",
   "regionGroup": "asia_pacific",
   "techFamiliarity": "high",
@@ -14,11 +14,11 @@
   "toneBaseline": "curious",
   "archetype": "career climber",
   "lifeStage": "student",
-  "summary": "Hiroshi is a young adult student in retail who is career climber and tends to make intuitive decisions.",
+  "summary": "Hiroshi is a student in retail — career climber with a curious baseline and intuitive decision-making.",
   "tags": [
     "retail",
-    "productivity",
     "young_adult",
-    "student"
+    "student",
+    "education"
   ]
 }

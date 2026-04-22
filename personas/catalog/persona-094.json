@@ -4,7 +4,7 @@
   "ageBand": "senior",
   "sex": "female",
   "industry": "creator_economy",
-  "domain": "wellness",
+  "domain": "fashion",
   "roleFamily": "creator",
   "regionGroup": "europe",
   "techFamiliarity": "low",
@@ -14,11 +14,11 @@
   "toneBaseline": "skeptical",
   "archetype": "local-first supporter",
   "lifeStage": "consulting",
-  "summary": "Margot is a senior creator in creator economy who is local-first supporter and tends to make deliberate decisions.",
+  "summary": "Margot is a consultant in the creator economy — local-first supporter with a skeptical baseline and deliberate decision-making.",
   "tags": [
     "creator_economy",
-    "wellness",
     "senior",
-    "creator"
+    "creator",
+    "fashion"
   ]
 }

@@ -4,7 +4,7 @@
   "ageBand": "young_adult",
   "sex": "female",
   "industry": "finance",
-  "domain": "community",
+  "domain": "wellness",
   "roleFamily": "creator",
   "regionGroup": "north_america",
   "techFamiliarity": "low",
@@ -14,11 +14,10 @@
   "toneBaseline": "skeptical",
   "archetype": "detail-focused evaluator",
   "lifeStage": "young_parent",
-  "summary": "Drew is a young adult creator in finance who is detail-focused evaluator and tends to make risk averse decisions.",
+  "summary": "Drew is a young parent in finance — detail-focused evaluator with a skeptical baseline and risk averse decision-making.",
   "tags": [
-    "finance",
-    "community",
     "young_adult",
-    "creator"
+    "creator",
+    "wellness"
   ]
 }
