@@ -15,6 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
+    "fi": "tsx src/cli.ts",
     "lint": "tsc --noEmit -p tsconfig.json",
     "start": "node dist/cli.js",
     "test": "vitest run"
