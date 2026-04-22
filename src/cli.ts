@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import path from "node:path";
+import { emitKeypressEvents } from "node:readline";
+import type { Key } from "node:readline";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
 
@@ -11,7 +13,7 @@ import { loadPersonaCatalog } from "./personas.js";
 import { listProviderStatuses } from "./providers/index.js";
 import { executeRun } from "./run.js";
 import { listAvailableRuns } from "./runs.js";
-import { startStaticServer } from "./server.js";
+import { openUrlInBrowser, startStaticServer } from "./server.js";
 import { asciiBanner, createRunReporter, formatDuration } from "./terminal.js";
 
 const program = new Command();
@@ -270,10 +272,12 @@ async function serveReport(options: {
     directory: reportDirectory,
     port: options.port,
   });
+  const opened = await openUrlInBrowser(server.url);
 
   options.reporter.reportServer([
     `Serving report for ${options.runId}`,
     `URL          ${server.url}`,
+    opened ? "Browser      opened automatically" : "Browser      could not auto-open; use the URL above",
     "Keep this process running while you browse the report.",
     "Press Ctrl+C to stop the local server.",
   ]);
@@ -295,28 +299,58 @@ async function promptForRunId(outputDir: string): Promise<string> {
     throw new Error("Run ID is required when stdin is not interactive.");
   }
 
-  const rl = createInterface({
-    input: stdin,
-    output: stdout,
-  });
+  console.log(asciiBanner());
+  console.log("Choose a report to serve:\n");
 
-  try {
-    console.log(asciiBanner());
-    console.log("Choose a report to serve:\n");
-    runs.forEach((run, index) => {
-      const timestamp = new Date(run.createdAt).toLocaleString();
-      console.log(`${String(index + 1).padStart(2, " ")}. ${run.runId}  ${run.provider}  ${run.count} personas  ${timestamp}`);
-    });
-
-    const answer = (await rl.question("\nreport> ")).trim();
-    const selectedIndex = Number(answer);
-
-    if (!Number.isInteger(selectedIndex) || selectedIndex < 1 || selectedIndex > runs.length) {
-      throw new Error(`Select a report number between 1 and ${runs.length}.`);
+  const renderList = (selected: number, firstRender: boolean) => {
+    if (!firstRender) {
+      stdout.write(`\x1b[${runs.length + 1}A`);
     }
+    for (let i = 0; i < runs.length; i++) {
+      const run = runs[i]!;
+      const timestamp = new Date(run.createdAt).toLocaleString();
+      const label = `${run.runId}  ${run.provider}  ${run.count} personas  ${timestamp}`;
+      if (i === selected) {
+        stdout.write(`\r\x1b[K  \x1b[36m\x1b[1m> ${label}\x1b[0m\n`);
+      } else {
+        stdout.write(`\r\x1b[K    ${label}\n`);
+      }
+    }
+    stdout.write(`\r\x1b[K\x1b[2m  ↑↓ navigate  Enter select\x1b[0m\n`);
+  };
 
-    return runs[selectedIndex - 1]?.runId as string;
-  } finally {
-    rl.close();
-  }
+  return new Promise<string>((resolve, reject) => {
+    let selected = 0;
+    renderList(selected, true);
+
+    emitKeypressEvents(stdin);
+    stdin.setRawMode(true);
+    stdin.resume();
+
+    const cleanup = () => {
+      stdin.setRawMode(false);
+      stdin.pause();
+      stdin.removeListener("keypress", onKeypress);
+    };
+
+    const onKeypress = (_str: string, key: Key) => {
+      if (key.name === "up") {
+        selected = Math.max(0, selected - 1);
+        renderList(selected, false);
+      } else if (key.name === "down") {
+        selected = Math.min(runs.length - 1, selected + 1);
+        renderList(selected, false);
+      } else if (key.name === "return") {
+        cleanup();
+        stdout.write("\n");
+        resolve(runs[selected]!.runId);
+      } else if (key.ctrl && key.name === "c") {
+        cleanup();
+        stdout.write("\n");
+        reject(new Error("Cancelled."));
+      }
+    };
+
+    stdin.on("keypress", onKeypress);
+  });
 }

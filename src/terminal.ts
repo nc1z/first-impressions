@@ -55,7 +55,7 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
     spinnerLabel = label;
     if (!spinnerInterval && stream.isTTY) {
       spinnerInterval = setInterval(() => {
-        const frame = spinnerFrames[spinnerFrame % spinnerFrames.length];
+        const frame = spinnerFrames[spinnerFrame % spinnerFrames.length] ?? "⠋";
         stream.write(`\r${paint("cyan", frame)} ${spinnerLabel}`);
         spinnerFrame++;
       }, 80);

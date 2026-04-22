@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -46,6 +47,42 @@ export async function startStaticServer(options: {
         });
       }),
   };
+}
+
+export async function openUrlInBrowser(url: string): Promise<boolean> {
+  const command = browserOpenCommand(url);
+  if (!command) {
+    return false;
+  }
+
+  return new Promise<boolean>((resolve) => {
+    const child = spawn(command.command, command.args, {
+      detached: true,
+      stdio: "ignore",
+    });
+
+    child.once("spawn", () => {
+      child.unref();
+      resolve(true);
+    });
+    child.once("error", () => resolve(false));
+  });
+}
+
+function browserOpenCommand(url: string): { command: string; args: string[] } | undefined {
+  if (process.platform === "darwin") {
+    return { command: "open", args: [url] };
+  }
+
+  if (process.platform === "win32") {
+    return { command: "cmd", args: ["/c", "start", "", url] };
+  }
+
+  if (process.platform === "linux") {
+    return { command: "xdg-open", args: [url] };
+  }
+
+  return undefined;
 }
 
 function contentTypeFor(filePath: string): string {
