@@ -6,6 +6,7 @@ import { resolveIdeaInput } from "./ingest.js";
 import { selectRunPersonas } from "./personas.js";
 import { createProviderAdapter } from "./providers/index.js";
 import { generateReport } from "./report.js";
+import type { RunProgressEvent } from "./terminal.js";
 import { ensureDir, writeJson, writeJsonLines } from "./utils/fs.js";
 import { createSeedFromText } from "./utils/random.js";
 
@@ -19,9 +20,22 @@ export interface ExecuteRunOptions {
   seed?: number | undefined;
   concurrency: number;
   outputDir: string;
+  onProgress?: ((event: RunProgressEvent) => void) | undefined;
 }
 
 export async function executeRun(options: ExecuteRunOptions): Promise<{ artifacts: RunArtifacts; runDirectory: string }> {
+  const startedAt = Date.now();
+  const emit = (event: Omit<RunProgressEvent, "elapsedMs">): void => {
+    options.onProgress?.({
+      ...event,
+      elapsedMs: Date.now() - startedAt,
+    });
+  };
+
+  emit({
+    stage: "input",
+    message: "Resolving idea input",
+  });
   const input = await resolveIdeaInput({
     text: options.text,
     file: options.file,
@@ -35,11 +49,38 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
     throw new Error(`Provider CLI "${options.provider}" is not available in PATH.`);
   }
 
+  emit({
+    stage: "summary",
+    message: `Generating structured brief via ${options.provider}`,
+  });
   const brief = await adapter.summarizeIdea(input);
+  emit({
+    stage: "summary",
+    message: "Structured brief ready",
+    brief,
+  });
+
+  emit({
+    stage: "personas",
+    message: `Selecting ${options.count} personas`,
+  });
   const personas = await selectRunPersonas({
     count: options.count,
     mode: options.mode,
     seed,
+  });
+  emit({
+    stage: "personas",
+    message: "Personas selected",
+    completed: personas.length,
+    total: personas.length,
+  });
+
+  emit({
+    stage: "evaluations",
+    message: "Starting persona evaluations",
+    completed: 0,
+    total: personas.length,
   });
   const responses = await evaluatePersonas({
     provider: options.provider,
@@ -77,6 +118,16 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
         } satisfies PersonaReaction;
       }
     },
+    onProgress: ({ completed, persona, reaction }) => {
+      emit({
+        stage: "evaluations",
+        message: "Persona completed",
+        completed,
+        total: personas.length,
+        persona,
+        reaction,
+      });
+    },
   });
   const insights = aggregateInsights(personas, responses);
   const runId = createRunId();
@@ -101,10 +152,22 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
     insights,
   };
 
+  emit({
+    stage: "persist",
+    message: "Writing run artifacts",
+  });
   await persistRunArtifacts(runDirectory, artifacts, input);
+  emit({
+    stage: "report",
+    message: "Generating local report",
+  });
   await generateReport({
     runDirectory,
     artifacts,
+  });
+  emit({
+    stage: "done",
+    message: "Run complete",
   });
 
   return { artifacts, runDirectory };
@@ -115,9 +178,11 @@ async function evaluatePersonas(options: {
   personas: RunPersona[];
   concurrency: number;
   evaluate: (persona: RunPersona) => Promise<PersonaReaction>;
+  onProgress?: ((event: { completed: number; persona: RunPersona; reaction: PersonaReaction }) => void) | undefined;
 }): Promise<PersonaReaction[]> {
   const results: PersonaReaction[] = [];
   let currentIndex = 0;
+  let completed = 0;
 
   const worker = async (): Promise<void> => {
     while (currentIndex < options.personas.length) {
@@ -125,6 +190,12 @@ async function evaluatePersonas(options: {
       currentIndex += 1;
       const result = await options.evaluate(persona);
       results.push(result);
+      completed += 1;
+      options.onProgress?.({
+        completed,
+        persona,
+        reaction: result,
+      });
     }
   };
 
