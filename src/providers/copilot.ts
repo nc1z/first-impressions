@@ -1,0 +1,46 @@
+import { ideaBriefSchema, personaReactionSchema } from "../domain/schemas.js";
+import type { IdeaBrief, IdeaInput, RunPersona } from "../domain/types.js";
+import { buildIdeaSummaryPrompt, buildPersonaEvaluationPrompt } from "../prompts.js";
+import type { ProviderAdapter } from "./base.js";
+import { extractJsonObject, isCommandAvailable, runCommand } from "./shell.js";
+
+async function runCopilotPrompt(prompt: string): Promise<string> {
+  const { stdout } = await runCommand({
+    command: "copilot",
+    args: [
+      "-p",
+      prompt,
+      "-s",
+      "--no-ask-user",
+      "--output-format",
+      "text",
+    ],
+    timeoutMs: 180000,
+  });
+
+  return stdout;
+}
+
+export class CopilotAdapter implements ProviderAdapter {
+  readonly name = "copilot" as const;
+
+  async isAvailable(): Promise<boolean> {
+    return isCommandAvailable("copilot");
+  }
+
+  async summarizeIdea(input: IdeaInput): Promise<IdeaBrief> {
+    const raw = await runCopilotPrompt(buildIdeaSummaryPrompt(input));
+    const parsed = ideaBriefSchema.parse(JSON.parse(extractJsonObject(raw)));
+
+    return {
+      ...parsed,
+      sourceKind: input.kind,
+      sourceLabel: input.label,
+    };
+  }
+
+  async evaluatePersona(brief: IdeaBrief, persona: RunPersona) {
+    const raw = await runCopilotPrompt(buildPersonaEvaluationPrompt(brief, persona));
+    return personaReactionSchema.parse(JSON.parse(extractJsonObject(raw)));
+  }
+}

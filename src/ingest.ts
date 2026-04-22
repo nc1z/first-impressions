@@ -4,9 +4,9 @@ import { URL } from "node:url";
 import type { IdeaInput } from "./domain/types.js";
 
 interface ResolveIdeaInputOptions {
-  text?: string;
-  file?: string;
-  url?: string;
+  text?: string | undefined;
+  file?: string | undefined;
+  url?: string | undefined;
 }
 
 export async function resolveIdeaInput(options: ResolveIdeaInputOptions): Promise<IdeaInput> {
