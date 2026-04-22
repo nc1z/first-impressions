@@ -233,7 +233,7 @@ function filterPersonaCatalog(catalog: PersonaSeed[], description: string): Pers
   return scored.filter((s) => s.score >= threshold).map((s) => s.persona);
 }
 
-function createPersonaOverlay(random: ReturnType<typeof createRandomSource>): PersonaOverlay {
+export function createPersonaOverlay(random: ReturnType<typeof createRandomSource>): PersonaOverlay {
   return {
     tone: random.pick(["supportive", "neutral", "skeptical", "enthusiastic", "measured"]),
     noveltyAppetite: random.integer(25, 95),
@@ -243,7 +243,7 @@ function createPersonaOverlay(random: ReturnType<typeof createRandomSource>): Pe
   };
 }
 
-function createPersonaPromptSummary(seed: PersonaSeed, overlay: PersonaOverlay): string {
+export function createPersonaPromptSummary(seed: PersonaSeed, overlay: PersonaOverlay): string {
   return [
     `${seed.name} is a ${seed.ageBand.replace("_", " ")} ${seed.roleFamily.replace("_", " ")} in ${seed.industry.replace("_", " ")}.`,
     `Baseline disposition: ${seed.toneBaseline}, ${seed.decisionStyle.replace("_", " ")} decisions, ${seed.skepticismLevel} skepticism.`,

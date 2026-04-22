@@ -14,6 +14,24 @@ export function buildIdeaSummaryPrompt(input: IdeaInput): string {
   ].join("\n");
 }
 
+export function buildAudiencePersonasPrompt(description: string, count: number): string {
+  return [
+    `Generate exactly ${count} realistic, diverse user personas that all belong to this target audience:`,
+    `"${description}"`,
+    "",
+    "Rules:",
+    "- Every persona must genuinely belong to this audience (role, industry, background, concerns).",
+    "- Maximize diversity WITHIN the audience: vary age band, region, tech familiarity, career stage, spending style, gender.",
+    "- Use culturally diverse names that match the person's regionGroup (e.g. Japanese names for asia_pacific, French names for europe).",
+    "- Each persona must be meaningfully distinct — no carbon copies.",
+    "- The industry, domain, roleFamily, lifeStage, and archetype must reflect the audience — be specific and realistic, not generic.",
+    "",
+    "Return a JSON array of exactly " + count + " objects. No markdown. No explanation. Start with [ and end with ].",
+    "",
+    'Each object shape: {"name":"string","ageBand":"teen|young_adult|adult|midlife|senior","sex":"female|male|unspecified","industry":"string","domain":"string","roleFamily":"string","regionGroup":"north_america|europe|asia_pacific|latin_america|africa_middle_east","techFamiliarity":"low|medium|high","spendingStyle":"frugal|balanced|premium_sensitive","decisionStyle":"intuitive|deliberate|social_proof|risk_averse","skepticismLevel":"low|medium|high","toneBaseline":"warm|blunt|curious|skeptical|optimistic|practical","archetype":"string","lifeStage":"string","summary":"string","tags":["string"]}',
+  ].join("\n");
+}
+
 export function buildPersonaEvaluationPrompt(brief: IdeaBrief, persona: RunPersona): string {
   return [
     "You are simulating a first-impression reaction to a product idea.",

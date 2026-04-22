@@ -1,8 +1,36 @@
-import { ideaBriefSchema, personaReactionSchema } from "../domain/schemas.js";
-import type { IdeaBrief, IdeaInput, RunPersona } from "../domain/types.js";
-import { buildIdeaSummaryPrompt, buildPersonaEvaluationPrompt } from "../prompts.js";
+import { ideaBriefSchema, personaReactionSchema, personaSeedSchema } from "../domain/schemas.js";
+import type { IdeaBrief, IdeaInput, PersonaSeed, RunPersona } from "../domain/types.js";
+import { buildAudiencePersonasPrompt, buildIdeaSummaryPrompt, buildPersonaEvaluationPrompt } from "../prompts.js";
 import type { ProviderAdapter } from "./base.js";
-import { extractJsonObject, isCommandAvailable, runCommand } from "./shell.js";
+import { extractJsonArray, extractJsonObject, isCommandAvailable, runCommand } from "./shell.js";
+
+async function generatePersonasInBatches(
+  description: string,
+  count: number,
+  runPrompt: (prompt: string) => Promise<string>,
+): Promise<PersonaSeed[]> {
+  const batchSize = 20;
+  const batches = Math.ceil(count / batchSize);
+  const results: PersonaSeed[] = [];
+
+  for (let i = 0; i < batches; i++) {
+    const batchCount = Math.min(batchSize, count - results.length);
+    const raw = await runPrompt(buildAudiencePersonasPrompt(description, batchCount));
+    const parsed = JSON.parse(extractJsonArray(raw)) as unknown[];
+    for (const item of parsed) {
+      const validated = personaSeedSchema.safeParse(item);
+      if (validated.success) {
+        results.push({
+          ...validated.data,
+          id: `generated-${String(results.length + 1).padStart(3, "0")}`,
+          tags: validated.data.tags ?? [],
+        });
+      }
+    }
+  }
+
+  return results;
+}
 
 async function runClaudePrompt(prompt: string): Promise<string> {
   const { stdout } = await runCommand({
@@ -41,5 +69,9 @@ export class ClaudeAdapter implements ProviderAdapter {
   async evaluatePersona(brief: IdeaBrief, persona: RunPersona) {
     const raw = await runClaudePrompt(buildPersonaEvaluationPrompt(brief, persona));
     return personaReactionSchema.parse(JSON.parse(extractJsonObject(raw)));
+  }
+
+  async generatePersonas(description: string, count: number): Promise<PersonaSeed[]> {
+    return generatePersonasInBatches(description, count, runClaudePrompt);
   }
 }

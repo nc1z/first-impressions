@@ -55,6 +55,49 @@ export async function runCommand(options: {
   });
 }
 
+export function extractJsonArray(raw: string): string {
+  const startIndex = raw.indexOf("[");
+  if (startIndex === -1) {
+    throw new Error(`Provider response did not contain a JSON array: ${raw.slice(0, 200)}`);
+  }
+
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+
+  for (let index = startIndex; index < raw.length; index += 1) {
+    const character = raw[index] as string;
+
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+
+    if (character === "\\") {
+      escaped = true;
+      continue;
+    }
+
+    if (character === "\"") {
+      inString = !inString;
+      continue;
+    }
+
+    if (inString) continue;
+
+    if (character === "[") {
+      depth += 1;
+    } else if (character === "]") {
+      depth -= 1;
+      if (depth === 0) {
+        return raw.slice(startIndex, index + 1);
+      }
+    }
+  }
+
+  throw new Error("Provider response contained an unterminated JSON array.");
+}
+
 export function extractJsonObject(raw: string): string {
   const startIndex = raw.indexOf("{");
   if (startIndex === -1) {
