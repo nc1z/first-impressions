@@ -22,7 +22,7 @@ export function buildPersonaEvaluationPrompt(brief: IdeaBrief, persona: RunPerso
     "Required JSON shape:",
     '{"reactionScore":0,"interestLevel":0,"clarityLevel":0,"trustLevel":0,"audienceFit":"low|mixed|high","wouldTry":true,"wouldShare":false,"wouldPay":false,"mainPositive":"string","mainConcern":"string","shortReaction":"string","tags":["string"]}',
     "Scoring should be 0-100 integers.",
-    "Keep `shortReaction` under 45 words.",
+    "Write `shortReaction` as a vivid, opinionated, first-person gut reaction — the kind of thing this persona would actually say out loud. Under 35 words. No hedging. Make it quotable.",
     "Idea brief:",
     JSON.stringify(brief, null, 2),
     "Persona:",

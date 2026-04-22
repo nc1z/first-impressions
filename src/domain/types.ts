@@ -84,6 +84,16 @@ export interface InsightBucket {
   count: number;
 }
 
+export interface FeaturedQuote {
+  personaId: string;
+  name: string;
+  ageBand: string;
+  domain: string;
+  score: number;
+  quote: string;
+  sentiment: "positive" | "neutral" | "negative";
+}
+
 export interface AggregatedInsights {
   totalResponses: number;
   successfulResponses: number;
@@ -92,12 +102,17 @@ export interface AggregatedInsights {
   averageInterestLevel: number;
   averageClarityLevel: number;
   averageTrustLevel: number;
+  wouldTryPercent: number;
+  wouldSharePercent: number;
+  wouldPayPercent: number;
+  audienceFitBreakdown: { low: number; mixed: number; high: number };
   topPositives: InsightBucket[];
   topConcerns: InsightBucket[];
   ageBandBreakdown: Array<InsightBucket & { averageReactionScore: number }>;
   domainBreakdown: Array<InsightBucket & { averageReactionScore: number }>;
   strongestSupporters: Array<{ personaId: string; summary: string; score: number }>;
   strongestSkeptics: Array<{ personaId: string; summary: string; score: number }>;
+  featuredQuotes: FeaturedQuote[];
 }
 
 export interface RunManifest {
