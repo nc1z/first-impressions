@@ -20,6 +20,7 @@ export interface ExecuteRunOptions {
   seed?: number | undefined;
   concurrency: number;
   outputDir: string;
+  audienceDescription?: string | undefined;
   onProgress?: ((event: RunProgressEvent) => void) | undefined;
 }
 
@@ -68,6 +69,7 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
     count: options.count,
     mode: options.mode,
     seed,
+    ...(options.audienceDescription ? { audienceDescription: options.audienceDescription } : {}),
   });
   emit({
     stage: "personas",
