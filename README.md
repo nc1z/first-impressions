@@ -10,12 +10,13 @@ Install dependencies:
 
 ```sh
 pnpm install
+pnpm build
 ```
 
-Start the interactive audience prompt:
+Run the CLI like a normal executable:
 
 ```sh
-pnpm dev
+./first-impressions
 ```
 
 You will see:
@@ -26,25 +27,31 @@ Share your project or idea.
 idea>
 ```
 
+You can also run the built entrypoint directly:
+
+```sh
+node dist/cli.js
+```
+
 For scripted or explicit-input runs:
 
 ```sh
-pnpm dev run "Your idea here" --provider claude
-pnpm dev run --file ./idea.txt --provider claude
-pnpm dev run --url https://example.com --provider claude
+./first-impressions run "Your idea here" --provider claude
+./first-impressions run --file ./idea.txt --provider claude
+./first-impressions run --url https://example.com --provider claude
 ```
 
 Open a report from a previous run:
 
 ```sh
-pnpm dev report <run-id>
+./first-impressions report <run-id>
 ```
 
 Other commands:
 
 ```sh
-pnpm dev providers list
-pnpm dev personas list
+./first-impressions providers list
+./first-impressions personas list
 ```
 
 ## Requirements
@@ -67,8 +74,8 @@ Run artifacts are written to `.first-impressions/runs/<run-id>/`.
 
 ```sh
 pnpm build     # compile
-pnpm dev       # interactive run from source
-pnpm start     # run compiled build
+pnpm dev       # maintainer/dev run from source
+pnpm start     # run compiled build via package script
 pnpm test      # run tests
 pnpm lint      # lint
 ```
