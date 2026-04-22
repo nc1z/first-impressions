@@ -10,10 +10,12 @@ import { stat } from "node:fs/promises";
 import { loadPersonaCatalog } from "./personas.js";
 import { listProviderStatuses } from "./providers/index.js";
 import { executeRun } from "./run.js";
+import { listAvailableRuns } from "./runs.js";
 import { startStaticServer } from "./server.js";
 import { asciiBanner, createRunReporter, formatDuration } from "./terminal.js";
 
 const program = new Command();
+let activeReporter: ReturnType<typeof createRunReporter> | undefined;
 
 program
   .name("first-impressions")
@@ -26,6 +28,8 @@ program
   .option("--seed <number>", "Seed for reproducible persona selection")
   .option("--concurrency <number>", "Parallel provider call limit", "10")
   .option("--output <path>", "Base output directory", path.resolve(process.cwd(), ".first-impressions"))
+  .option("--no-serve", "Do not start the localhost report server after the run")
+  .option("--report-port <number>", "Port to use when auto-serving the report", "0")
   .addHelpText(
     "beforeAll",
     `${asciiBanner()}\nFast AI audience simulation for startup ideas.\n\nRun with no subcommand to launch the interactive audience prompt.\n`,
@@ -46,6 +50,7 @@ program
 
 program.action(async (options) => {
   const reporter = createRunReporter();
+  activeReporter = reporter;
   reporter.intro();
 
   const text = await promptForIdeaText(reporter);
@@ -59,8 +64,11 @@ program.action(async (options) => {
     seed: options.seed ? Number(options.seed) : undefined,
     concurrency: Number(options.concurrency),
     outputDir: path.resolve(options.output as string),
+    serveReport: options.serve as boolean,
+    reportPort: Number(options.reportPort),
     reporter,
   });
+  activeReporter = undefined;
 });
 
 program
@@ -75,8 +83,12 @@ program
   .option("--seed <number>", "Seed for reproducible persona selection")
   .option("--concurrency <number>", "Parallel provider call limit", "10")
   .option("--output <path>", "Base output directory", path.resolve(process.cwd(), ".first-impressions"))
-  .action(async (text: string | undefined, options) => {
+  .option("--no-serve", "Do not start the localhost report server after the run")
+  .option("--report-port <number>", "Port to use when auto-serving the report", "0")
+  .action(async (text: string | undefined, _options, command: Command) => {
+    const options = command.optsWithGlobals();
     const reporter = createRunReporter();
+    activeReporter = reporter;
     reporter.intro();
     await runSimulation({
       text,
@@ -88,8 +100,11 @@ program
       seed: options.seed ? Number(options.seed) : undefined,
       concurrency: Number(options.concurrency),
       outputDir: path.resolve(options.output),
+      serveReport: options.serve as boolean,
+      reportPort: Number(options.reportPort),
       reporter,
     });
+    activeReporter = undefined;
   });
 
 const providersCommand = program.command("providers").description("Inspect provider availability.");
@@ -98,12 +113,14 @@ providersCommand
   .description("List available providers.")
   .action(async () => {
     const reporter = createRunReporter();
+    activeReporter = reporter;
     reporter.info([asciiBanner(), "Checking provider availability...\n"]);
     const providers = await listProviderStatuses();
 
     for (const provider of providers) {
       console.log(`${provider.available ? "[ok]" : "[--]"} ${provider.name.padEnd(8)} ${provider.available ? "available" : "missing"}`);
     }
+    activeReporter = undefined;
   });
 
 const personasCommand = program.command("personas").description("Inspect the persona catalog.");
@@ -112,6 +129,7 @@ personasCommand
   .description("List persona IDs and summaries.")
   .action(async () => {
     const reporter = createRunReporter();
+    activeReporter = reporter;
     reporter.info([asciiBanner(), "Persona catalog snapshot:\n"]);
     const catalog = await loadPersonaCatalog();
 
@@ -120,40 +138,31 @@ personasCommand
         `${persona.id}  ${persona.ageBand.padEnd(11)}  ${persona.industry.padEnd(22)}  ${persona.summary}`,
       );
     }
+    activeReporter = undefined;
   });
 
 program
   .command("report")
   .description("Serve a generated report for an existing run.")
-  .argument("<runId>", "Run ID to serve")
+  .argument("[runId]", "Run ID to serve")
   .option("--output <path>", "Base output directory", path.resolve(process.cwd(), ".first-impressions"))
   .option("--port <number>", "Port to bind to", "0")
-  .action(async (runId: string, options) => {
+  .action(async (runId: string | undefined, options) => {
     const reporter = createRunReporter();
-    reporter.info([asciiBanner(), `Preparing report for ${runId}...\n`]);
-    const reportDirectory = path.resolve(options.output, "runs", runId, "report");
-    await stat(path.join(reportDirectory, "index.html"));
-    const server = await startStaticServer({
-      directory: reportDirectory,
+    activeReporter = reporter;
+    const resolvedRunId = runId ?? (await promptForRunId(path.resolve(options.output)));
+    await serveReport({
+      runId: resolvedRunId,
+      outputDir: path.resolve(options.output),
       port: Number(options.port),
+      reporter,
     });
-
-    reporter.success([
-      `Serving report for ${runId}`,
-      `URL          ${server.url}`,
-      "Keep this process running while you browse the report.",
-      "Press Ctrl+C to stop the local server.",
-    ]);
-
-    process.on("SIGINT", async () => {
-      await server.close();
-      process.exit(0);
-    });
+    activeReporter = undefined;
   });
 
 program.parseAsync(process.argv).catch((error: unknown) => {
   const message = error instanceof Error ? error.message : String(error);
-  createRunReporter().failure(message);
+  (activeReporter ?? createRunReporter()).failure(message);
   process.exitCode = 1;
 });
 
@@ -167,6 +176,8 @@ async function runSimulation(options: {
   seed?: number | undefined;
   concurrency: number;
   outputDir: string;
+  serveReport: boolean;
+  reportPort: number;
   reporter: ReturnType<typeof createRunReporter>;
 }): Promise<void> {
   const startedAt = Date.now();
@@ -197,6 +208,15 @@ async function runSimulation(options: {
     `Top Signal   ${artifacts.insights.topPositives[0]?.label ?? "No positive signal extracted"}`,
     `Top Risk     ${artifacts.insights.topConcerns[0]?.label ?? "No concern extracted"}`,
   ]);
+
+  if (options.serveReport) {
+    await serveReport({
+      runId: artifacts.manifest.runId,
+      outputDir: options.outputDir,
+      port: options.reportPort,
+      reporter: options.reporter,
+    });
+  }
 }
 
 async function promptForIdeaText(reporter: ReturnType<typeof createRunReporter>): Promise<string> {
@@ -233,6 +253,69 @@ async function promptForIdeaText(reporter: ReturnType<typeof createRunReporter>)
     }
 
     throw new Error("Idea input cannot be empty.");
+  } finally {
+    rl.close();
+  }
+}
+
+async function serveReport(options: {
+  runId: string;
+  outputDir: string;
+  port: number;
+  reporter: ReturnType<typeof createRunReporter>;
+}): Promise<void> {
+  const reportDirectory = path.resolve(options.outputDir, "runs", options.runId, "report");
+  await stat(path.join(reportDirectory, "index.html"));
+  const server = await startStaticServer({
+    directory: reportDirectory,
+    port: options.port,
+  });
+
+  options.reporter.reportServer([
+    `Serving report for ${options.runId}`,
+    `URL          ${server.url}`,
+    "Keep this process running while you browse the report.",
+    "Press Ctrl+C to stop the local server.",
+  ]);
+
+  await new Promise<void>((resolve, reject) => {
+    process.once("SIGINT", () => {
+      void server.close().then(resolve).catch(reject);
+    });
+  });
+}
+
+async function promptForRunId(outputDir: string): Promise<string> {
+  const runs = await listAvailableRuns(outputDir);
+  if (runs.length === 0) {
+    throw new Error(`No reports found in ${path.resolve(outputDir, "runs")}.`);
+  }
+
+  if (!stdin.isTTY) {
+    throw new Error("Run ID is required when stdin is not interactive.");
+  }
+
+  const rl = createInterface({
+    input: stdin,
+    output: stdout,
+  });
+
+  try {
+    console.log(asciiBanner());
+    console.log("Choose a report to serve:\n");
+    runs.forEach((run, index) => {
+      const timestamp = new Date(run.createdAt).toLocaleString();
+      console.log(`${String(index + 1).padStart(2, " ")}. ${run.runId}  ${run.provider}  ${run.count} personas  ${timestamp}`);
+    });
+
+    const answer = (await rl.question("\nreport> ")).trim();
+    const selectedIndex = Number(answer);
+
+    if (!Number.isInteger(selectedIndex) || selectedIndex < 1 || selectedIndex > runs.length) {
+      throw new Error(`Select a report number between 1 and ${runs.length}.`);
+    }
+
+    return runs[selectedIndex - 1]?.runId as string;
   } finally {
     rl.close();
   }

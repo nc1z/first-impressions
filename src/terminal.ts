@@ -34,16 +34,14 @@ export interface RunProgressEvent {
 export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {}) {
   const stream = options.stream ?? process.stdout;
   const interactive = Boolean(stream.isTTY);
-  let spinner: Spinner | undefined;
-  let lastPrintedLength = 0;
-  let liveSamples = 0;
+  let spinnerText = "";
+  let spinnerInterval: NodeJS.Timeout | undefined;
+  let spinnerFrameIndex = 0;
+  let renderedLineLength = 0;
 
   const writeLine = (line = ""): void => {
-    if (interactive && lastPrintedLength > 0) {
-      stream.write("\r");
-      stream.write(" ".repeat(lastPrintedLength));
-      stream.write("\r");
-      lastPrintedLength = 0;
+    if (interactive) {
+      clearInteractiveLine();
     }
 
     stream.write(`${line}\n`);
@@ -56,19 +54,18 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
       return;
     }
 
-    spinner = new Spinner({
-      stream,
-      text: `${paint("cyan", label)} ${paint("dim", detail)}`,
-      onFrame: (length) => {
-        lastPrintedLength = length;
-      },
-    });
-    spinner.start();
+    spinnerText = `${paint("cyan", label)} ${paint("dim", detail)}`;
+    spinnerInterval = setInterval(() => {
+      spinnerFrameIndex += 1;
+      renderInteractiveLine();
+    }, 80);
+    renderInteractiveLine();
   };
 
   const updateStage = (label: string, detail: string): void => {
-    if (spinner) {
-      spinner.setText(`${paint("cyan", label)} ${paint("dim", detail)}`);
+    if (interactive && spinnerText) {
+      spinnerText = `${paint("cyan", label)} ${paint("dim", detail)}`;
+      renderInteractiveLine();
       return;
     }
 
@@ -76,16 +73,16 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
   };
 
   const stopSpinner = (finalLine?: string): void => {
-    if (!spinner) {
+    if (!interactive || !spinnerText) {
       if (finalLine) {
         writeLine(finalLine);
       }
       return;
     }
 
-    spinner.stop();
-    spinner = undefined;
-    lastPrintedLength = 0;
+    clearSpinnerInterval();
+    clearInteractiveLine();
+    spinnerText = "";
     if (finalLine) {
       writeLine(finalLine);
     }
@@ -130,10 +127,12 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
       if (event.stage === "evaluations") {
         const completed = event.completed ?? 0;
         const total = event.total ?? 0;
-        updateStage("Evaluating", `${completed}/${total} personas ${paint("dim", `(${elapsed})`)}`);
-        if (event.persona && event.reaction && liveSamples < 10) {
-          liveSamples += 1;
-          writeLine(formatReactionSample(event.persona, event.reaction, elapsed));
+        const baseLine = `Evaluating ${completed}/${total} personas ${paint("dim", `(${elapsed})`)}`;
+        if (event.persona && event.reaction) {
+          stopSpinner();
+          writeLine(`${baseLine} ${paint("dim", "-")} ${formatReactionSample(event.persona, event.reaction)}`);
+        } else {
+          updateStage("Evaluating", `${completed}/${total} personas ${paint("dim", `(${elapsed})`)}`);
         }
         return;
       }
@@ -170,7 +169,48 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
       stopSpinner();
       writeLine(`${paint("red", "[error]")} ${message}`);
     },
+    reportServer(lines: string[]): void {
+      startStage("Report", `${paint("dim", "Serving localhost report")}`);
+      stopSpinner();
+      writeLine(paint("green", asciiRule("=")));
+      for (const line of lines) {
+        writeLine(line);
+      }
+      writeLine(paint("green", asciiRule("=")));
+    },
   };
+
+  function renderInteractiveLine(): void {
+    if (!interactive || !spinnerText) {
+      return;
+    }
+
+    clearInteractiveLine();
+
+    const frames = ["-", "\\", "|", "/"];
+    const frame = frames[spinnerFrameIndex % frames.length] as string;
+    const line = `${frame} ${spinnerText}`;
+    stream.write(line);
+    renderedLineLength = stripAnsi(line).length;
+  }
+
+  function clearInteractiveLine(): void {
+    if (!interactive || renderedLineLength === 0) {
+      return;
+    }
+
+    stream.write("\r");
+    stream.write(" ".repeat(renderedLineLength));
+    stream.write("\r");
+    renderedLineLength = 0;
+  }
+
+  function clearSpinnerInterval(): void {
+    if (spinnerInterval) {
+      clearInterval(spinnerInterval);
+      spinnerInterval = undefined;
+    }
+  }
 }
 
 export function formatDuration(elapsedMs: number): string {
@@ -201,13 +241,12 @@ function asciiRule(character: string): string {
   return character.repeat(78);
 }
 
-function formatReactionSample(persona: RunPersona, reaction: PersonaReaction, elapsed: string): string {
+function formatReactionSample(persona: RunPersona, reaction: PersonaReaction): string {
   const scoreColor = reaction.error ? "red" : reaction.reactionScore >= 70 ? "green" : reaction.reactionScore >= 45 ? "yellow" : "red";
   const score = reaction.error ? "ERR" : `${reaction.reactionScore}`.padStart(3, " ");
   const blurb = truncate(reaction.shortReaction || reaction.mainConcern, 88);
 
   return [
-    paint("dim", `[${elapsed}]`),
     paint("bold", persona.seed.name),
     paint("dim", `${persona.seed.ageBand}/${persona.seed.domain}`),
     paint(scoreColor, score),
