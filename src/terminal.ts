@@ -33,56 +33,41 @@ export interface RunProgressEvent {
 
 export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {}) {
   const stream = options.stream ?? process.stdout;
-  const interactive = Boolean(stream.isTTY);
-  let spinnerText = "";
-  let spinnerInterval: NodeJS.Timeout | undefined;
-  let spinnerFrameIndex = 0;
-  let renderedLineLength = 0;
+
+  let spinnerInterval: ReturnType<typeof setInterval> | null = null;
+  let spinnerFrame = 0;
+  let spinnerLabel = "";
+  const spinnerFrames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 
   const writeLine = (line = ""): void => {
-    if (interactive) {
-      clearInteractiveLine();
-    }
-
     stream.write(`${line}\n`);
   };
 
   const startStage = (label: string, detail: string, elapsed?: string): void => {
-    stopSpinner();
-    if (!interactive) {
-      writeLine(`[${elapsed ?? "0ms"}] ${label}: ${detail}`);
-      return;
-    }
-
-    spinnerText = `${paint("cyan", label)} ${paint("dim", detail)}`;
-    spinnerInterval = setInterval(() => {
-      spinnerFrameIndex += 1;
-      renderInteractiveLine();
-    }, 80);
-    renderInteractiveLine();
+    writeLine(`[${elapsed ?? "0ms"}] ${label}: ${detail}`);
   };
 
   const updateStage = (label: string, detail: string): void => {
-    if (interactive && spinnerText) {
-      spinnerText = `${paint("cyan", label)} ${paint("dim", detail)}`;
-      renderInteractiveLine();
-      return;
-    }
-
     writeLine(`${label} ${detail}`);
   };
 
-  const stopSpinner = (finalLine?: string): void => {
-    if (!interactive || !spinnerText) {
-      if (finalLine) {
-        writeLine(finalLine);
-      }
-      return;
+  const startSpinner = (label: string): void => {
+    spinnerLabel = label;
+    if (!spinnerInterval && stream.isTTY) {
+      spinnerInterval = setInterval(() => {
+        const frame = spinnerFrames[spinnerFrame % spinnerFrames.length];
+        stream.write(`\r${paint("cyan", frame)} ${spinnerLabel}`);
+        spinnerFrame++;
+      }, 80);
     }
+  };
 
-    clearSpinnerInterval();
-    clearInteractiveLine();
-    spinnerText = "";
+  const stopSpinner = (finalLine?: string): void => {
+    if (spinnerInterval) {
+      clearInterval(spinnerInterval);
+      spinnerInterval = null;
+      stream.write("\r\x1b[K");
+    }
     if (finalLine) {
       writeLine(finalLine);
     }
@@ -108,7 +93,11 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
           writeLine(`${paint("bold", event.brief.title)}`);
           writeLine(`${paint("dim", event.brief.oneLineSummary)}`);
         } else {
-          updateStage("Summary", `${event.message} ${paint("dim", `(${elapsed})`)}`);
+          spinnerLabel = `${event.message} ${paint("dim", `(${elapsed})`)}`;
+          startSpinner(spinnerLabel);
+          if (!stream.isTTY) {
+            updateStage("Summary", `${event.message} ${paint("dim", `(${elapsed})`)}`);
+          }
         }
         return;
       }
@@ -129,7 +118,6 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
         const total = event.total ?? 0;
         const baseLine = `Evaluating ${completed}/${total} personas ${paint("dim", `(${elapsed})`)}`;
         if (event.persona && event.reaction) {
-          stopSpinner();
           writeLine(`${baseLine} ${paint("dim", "-")} ${formatReactionSample(event.persona, event.reaction)}`);
         } else {
           updateStage("Evaluating", `${completed}/${total} personas ${paint("dim", `(${elapsed})`)}`);
@@ -171,7 +159,6 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
     },
     reportServer(lines: string[]): void {
       startStage("Report", `${paint("dim", "Serving localhost report")}`);
-      stopSpinner();
       writeLine(paint("green", asciiRule("=")));
       for (const line of lines) {
         writeLine(line);
@@ -179,38 +166,6 @@ export function createRunReporter(options: { stream?: NodeJS.WriteStream } = {})
       writeLine(paint("green", asciiRule("=")));
     },
   };
-
-  function renderInteractiveLine(): void {
-    if (!interactive || !spinnerText) {
-      return;
-    }
-
-    clearInteractiveLine();
-
-    const frames = ["-", "\\", "|", "/"];
-    const frame = frames[spinnerFrameIndex % frames.length] as string;
-    const line = `${frame} ${spinnerText}`;
-    stream.write(line);
-    renderedLineLength = stripAnsi(line).length;
-  }
-
-  function clearInteractiveLine(): void {
-    if (!interactive || renderedLineLength === 0) {
-      return;
-    }
-
-    stream.write("\r");
-    stream.write(" ".repeat(renderedLineLength));
-    stream.write("\r");
-    renderedLineLength = 0;
-  }
-
-  function clearSpinnerInterval(): void {
-    if (spinnerInterval) {
-      clearInterval(spinnerInterval);
-      spinnerInterval = undefined;
-    }
-  }
 }
 
 export function formatDuration(elapsedMs: number): string {
@@ -268,51 +223,4 @@ function paint(color: keyof typeof colors, value: string): string {
   }
 
   return `${colors[color]}${value}${colors.reset}`;
-}
-
-class Spinner {
-  private interval: NodeJS.Timeout | undefined;
-  private frameIndex = 0;
-  private text: string;
-
-  constructor(
-    private readonly options: {
-      stream: NodeJS.WriteStream;
-      text: string;
-      onFrame: (lineLength: number) => void;
-    },
-  ) {
-    this.text = options.text;
-  }
-
-  start(): void {
-    this.render();
-    this.interval = setInterval(() => this.render(), 80);
-  }
-
-  stop(): void {
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = undefined;
-    }
-
-    this.options.stream.write("\r");
-  }
-
-  setText(text: string): void {
-    this.text = text;
-  }
-
-  private render(): void {
-    const frames = ["-", "\\", "|", "/"];
-    const frame = frames[this.frameIndex % frames.length] as string;
-    this.frameIndex += 1;
-    const line = `${frame} ${this.text}`;
-    this.options.stream.write(`\r${line}`);
-    this.options.onFrame(stripAnsi(line).length);
-  }
-}
-
-function stripAnsi(value: string): string {
-  return value.replace(/\u001b\[[0-9;]*m/g, "");
 }
