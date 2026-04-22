@@ -1,58 +1,60 @@
 # first-impressions
 
-`first-impressions` is a TypeScript CLI for fast audience simulation.
+Give an idea to `first-impressions` and get back a simulated audience reaction across 100 diverse personas.
 
-You give it an idea as text, a file, or a URL. The CLI first normalizes that input into a concise structured idea brief. It then runs a large batch of provider-backed persona evaluations and produces a local report with highlights, filters, and charts.
+You pass in text, a file, or a URL. The CLI summarizes your idea into a structured brief, runs it past 100 diverse perspectives from a curated set of personas, and generates a local report with sentiment breakdowns, highlights, and filters.
 
-## Planned Workflow
+## Getting started
 
-1. Ingest text, files, or URLs.
-2. Summarize the idea into a normalized brief.
-3. Select 100 personas from a curated seed catalog with controlled randomization.
-4. Run fast first-impression evaluations through a provider adapter.
-5. Aggregate the results into insights.
-6. Persist run artifacts under a gitignored output folder.
-7. Serve a localhost report for inspection.
+Install dependencies:
 
-## Provider Assumptions
+```sh
+pnpm install
+```
 
-The CLI is designed to work with installed provider CLIs:
+Run against an idea:
 
-- `codex`
-- `claude`
-- `copilot`
+```sh
+pnpm dev run "Your idea here" --provider claude
+pnpm dev run --file ./idea.txt --provider claude
+pnpm dev run --url https://example.com --provider claude
+```
 
-They must already be installed and authenticated in the local environment.
+Open a report from a previous run:
 
-## Package Management
+```sh
+pnpm dev report <run-id>
+```
 
-This repository is configured for `pnpm`, with a 7-day `minimumReleaseAge` set in `pnpm-workspace.yaml`.
+Other commands:
 
-## Commands
+```sh
+pnpm dev providers list
+pnpm dev personas list
+```
 
-- `pnpm dev run "Your idea here" --provider codex`
-- `pnpm dev run --file ./idea.txt --provider claude`
-- `pnpm dev run --url https://example.com --provider copilot`
-- `pnpm dev providers list`
-- `pnpm dev personas list`
-- `pnpm dev report <run-id>`
+## Requirements
 
-For the built CLI:
+The CLI calls out to an AI provider CLI that must already be installed and authenticated in your environment. Supported providers: `claude`, `copilot`, `codex`.
 
-- `pnpm build`
-- `pnpm start -- run "Your idea here" --provider claude`
+## Options
 
-Run artifacts are written to `./.first-impressions/runs/<run-id>/`.
+| Flag | Default | Description |
+|---|---|---|
+| `--provider` | — | Which provider CLI to use |
+| `--count` | `100` | Number of personas to run |
+| `--seed` | auto | Seed for reproducible runs |
+| `--concurrency` | auto | Max parallel evaluations |
+| `--output` | `.first-impressions/` | Where to write run artifacts |
 
-## Notes
-
-- `claude` and `copilot` were validated end-to-end from this repo.
-- `codex` is supported by the adapter layer, but it expects a writable Codex home/session area in the runtime environment.
+Run artifacts are written to `.first-impressions/runs/<run-id>/`.
 
 ## Scripts
 
-- `pnpm build`
-- `pnpm dev`
-- `pnpm lint`
-- `pnpm start`
-- `pnpm test`
+```sh
+pnpm build     # compile
+pnpm dev       # run from source
+pnpm start     # run compiled build
+pnpm test      # run tests
+pnpm lint      # lint
+```
