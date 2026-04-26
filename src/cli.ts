@@ -15,6 +15,7 @@ import { executeRun } from "./run.js";
 import { listAvailableRuns } from "./runs.js";
 import { openUrlInBrowser, startStaticServer } from "./server.js";
 import { asciiBanner, createRunReporter, formatDuration } from "./terminal.js";
+import { launchUI } from "./ui.js";
 
 const program = new Command();
 let activeReporter: ReturnType<typeof createRunReporter> | undefined;
@@ -33,6 +34,8 @@ program
   .option("--output <path>", "Base output directory", path.resolve(process.cwd(), ".first-impressions"))
   .option("--no-serve", "Do not start the localhost report server after the run")
   .option("--report-port <number>", "Port to use when auto-serving the report", "0")
+  .option("--ui", "Launch a browser-based UI instead of terminal prompts")
+  .option("--ui-port <number>", "Port for the UI server (default: random)", "0")
   .addHelpText(
     "beforeAll",
     `${asciiBanner()}\nFast AI audience simulation for startup ideas.\n\nRun with no subcommand to launch the interactive audience prompt.\n`,
@@ -47,12 +50,22 @@ program
       "  $ first-impressions --persona-set tech-general",
       '  $ first-impressions run "A browser extension that turns job posts into interview prep"',
       "  $ first-impressions run --file ./idea.txt --provider claude --persona-set tech-general --count 25",
+      "  $ first-impressions --ui",
       "  $ first-impressions run --url https://example.com --provider copilot",
       "  $ first-impressions report <run-id>",
     ].join("\n"),
   );
 
 program.action(async (options) => {
+  // Browser UI mode
+  if (options.ui) {
+    await launchUI({
+      outputDir: path.resolve(options.output as string),
+      port: Number(options.uiPort) || 0,
+    });
+    return;
+  }
+
   const reporter = createRunReporter();
   activeReporter = reporter;
   reporter.intro();
