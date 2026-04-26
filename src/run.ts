@@ -1,10 +1,9 @@
 import path from "node:path";
 
 import { aggregateInsights } from "./analysis.js";
-import type { IdeaInput, PersonaReaction, PersonaSeed, ProviderName, RunArtifacts, RunMode, RunPersona } from "./domain/types.js";
+import type { IdeaInput, PersonaReaction, ProviderName, RunArtifacts, RunMode, RunPersona } from "./domain/types.js";
 import { resolveIdeaInput } from "./ingest.js";
 import { selectRunPersonas } from "./personas.js";
-import type { ProviderAdapter } from "./providers/base.js";
 import { createProviderAdapter } from "./providers/index.js";
 import { generateReport } from "./report.js";
 import type { RunProgressEvent } from "./terminal.js";
@@ -21,7 +20,6 @@ export interface ExecuteRunOptions {
   seed?: number | undefined;
   concurrency: number;
   outputDir: string;
-  audienceDescription?: string | undefined;
   onProgress?: ((event: RunProgressEvent) => void) | undefined;
 }
 
@@ -64,13 +62,9 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
 
   emit({
     stage: "personas",
-    message: options.audienceDescription
-      ? `Generating custom audience: "${options.audienceDescription}"`
-      : `Selecting ${options.count} personas`,
+    message: `Selecting ${options.count} personas`,
   });
-  const personas = options.audienceDescription
-    ? await generateCustomPersonas({ description: options.audienceDescription, count: options.count, seed, adapter })
-    : await selectRunPersonas({ count: options.count, mode: options.mode, seed });
+  const personas = await selectRunPersonas({ count: options.count, mode: options.mode, seed });
   emit({
     stage: "personas",
     message: "Personas ready",
@@ -173,31 +167,6 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
   });
 
   return { artifacts, runDirectory };
-}
-
-async function generateCustomPersonas(options: {
-  description: string;
-  count: number;
-  seed: number;
-  adapter: ProviderAdapter;
-}): Promise<RunPersona[]> {
-  const { createRandomSource } = await import("./utils/random.js");
-  const { createPersonaOverlay, createPersonaPromptSummary } = await import("./personas.js");
-
-  const seeds = await options.adapter.generatePersonas(options.description, options.count);
-  if (seeds.length === 0) {
-    throw new Error("Provider returned no personas for the given audience description.");
-  }
-
-  const random = createRandomSource(options.seed);
-  return seeds.map((seed: PersonaSeed) => {
-    const overlay = createPersonaOverlay(random);
-    return {
-      seed,
-      overlay,
-      personaPromptSummary: createPersonaPromptSummary(seed, overlay),
-    };
-  });
 }
 
 async function evaluatePersonas(options: {

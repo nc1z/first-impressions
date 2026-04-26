@@ -1,10 +1,9 @@
 import path from "node:path";
 
 import type { AgeBand, PersonaOverlay, PersonaSeed, RunMode, RunPersona } from "./domain/types.js";
-import { readJsonDirectory } from "./utils/fs.js";
 import { createRandomSource } from "./utils/random.js";
 
-const personaCatalogPath = path.resolve(process.cwd(), "personas", "catalog");
+const personaCatalogPath = path.resolve(process.cwd(), "personas", "general.json");
 
 const generalAgeDistribution: Record<AgeBand, number> = {
   teen: 5,
@@ -58,33 +57,29 @@ export function describePersona(seed: PersonaSeed): string {
 }
 
 export async function loadPersonaCatalog(): Promise<PersonaSeed[]> {
-  return readJsonDirectory<PersonaSeed>(personaCatalogPath);
+  const { readFile } = await import("node:fs/promises");
+  const raw = await readFile(personaCatalogPath, "utf8");
+  return JSON.parse(raw) as PersonaSeed[];
 }
 
 export async function selectRunPersonas(options: {
   count: number;
   mode: RunMode;
   seed: number;
-  audienceDescription?: string;
 }): Promise<RunPersona[]> {
   const catalog = await loadPersonaCatalog();
 
-  const pool =
-    options.audienceDescription
-      ? filterPersonaCatalog(catalog, options.audienceDescription)
-      : catalog;
-
-  if (pool.length === 0) {
-    throw new Error("No personas matched the audience description. Try broader terms.");
+  if (catalog.length === 0) {
+    throw new Error("Persona catalog is empty.");
   }
 
-  const count = Math.min(options.count, pool.length);
+  const count = Math.min(options.count, catalog.length);
 
   const random = createRandomSource(options.seed);
   const selection =
     options.mode === "general"
-      ? selectGeneralAudienceCatalog(pool, count, random)
-      : random.shuffle(pool).slice(0, count);
+      ? selectGeneralAudienceCatalog(catalog, count, random)
+      : random.shuffle(catalog).slice(0, count);
 
   return selection.map((seed) => {
     const overlay = createPersonaOverlay(random);
@@ -159,78 +154,6 @@ function computeTargetCounts(count: number): Record<AgeBand, number> {
   return Object.fromEntries(
     exactCounts.map((entry) => [entry.ageBand, entry.base]),
   ) as Record<AgeBand, number>;
-}
-
-// Maps common plain-language terms to persona field values for richer matching.
-const audienceSynonyms: Record<string, string[]> = {
-  tech: ["consumer_tech", "technology", "software", "high"],
-  startup: ["small_business_owner", "early_career", "career_building"],
-  founder: ["small_business_owner", "independent_professional"],
-  entrepreneur: ["small_business_owner", "independent_professional"],
-  young: ["teen", "young_adult"],
-  senior: ["senior", "retired", "grandparent"],
-  older: ["midlife", "senior"],
-  student: ["student", "secondary_student", "college_bound"],
-  professional: ["professional_services", "mid_career", "team_lead", "consulting"],
-  manager: ["team_lead", "mid_career"],
-  health: ["healthcare", "wellness", "caregiver"],
-  medical: ["healthcare"],
-  finance: ["finance"],
-  money: ["finance", "frugal", "balanced"],
-  food: ["food", "hospitality"],
-  creative: ["creator", "creator_economy", "media"],
-  parent: ["parent", "young_parent", "caregiver"],
-  retired: ["retired", "grandparent"],
-  low: ["low"],
-  medium: ["medium"],
-  high: ["high"],
-};
-
-function filterPersonaCatalog(catalog: PersonaSeed[], description: string): PersonaSeed[] {
-  const lower = description.toLowerCase();
-
-  // Expand description with synonyms
-  const expandedTerms = new Set<string>();
-  for (const word of lower.split(/\W+/).filter((w) => w.length > 2)) {
-    expandedTerms.add(word);
-    for (const [key, values] of Object.entries(audienceSynonyms)) {
-      if (key === word || word.startsWith(key)) {
-        values.forEach((v) => expandedTerms.add(v.replace(/_/g, " ")));
-      }
-    }
-  }
-
-  const scored = catalog.map((persona) => {
-    const searchable = [
-      persona.industry,
-      persona.domain,
-      persona.roleFamily,
-      persona.lifeStage,
-      persona.ageBand,
-      persona.techFamiliarity,
-      persona.spendingStyle,
-      persona.archetype,
-      persona.summary,
-      ...persona.tags,
-    ]
-      .join(" ")
-      .toLowerCase()
-      .replace(/_/g, " ");
-
-    let score = 0;
-    for (const term of expandedTerms) {
-      if (searchable.includes(term)) score++;
-    }
-
-    return { persona, score };
-  });
-
-  const maxScore = Math.max(...scored.map((s) => s.score));
-  if (maxScore === 0) return catalog; // No match at all — fall back to full catalog
-
-  // Keep personas that score at least half the max score
-  const threshold = Math.max(1, Math.floor(maxScore * 0.5));
-  return scored.filter((s) => s.score >= threshold).map((s) => s.persona);
 }
 
 export function createPersonaOverlay(random: ReturnType<typeof createRandomSource>): PersonaOverlay {

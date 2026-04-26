@@ -61,7 +61,6 @@ program.action(async (options) => {
       ? await promptForProvider()
       : (options.provider as "codex" | "claude" | "copilot");
 
-  const audienceDescription = await promptForAudienceDescription();
   const text = await promptForIdeaText(reporter);
   await runSimulation({
     text,
@@ -75,7 +74,6 @@ program.action(async (options) => {
     outputDir: path.resolve(options.output as string),
     serveReport: options.serve as boolean,
     reportPort: Number(options.reportPort),
-    audienceDescription,
     reporter,
   });
   activeReporter = undefined;
@@ -188,7 +186,6 @@ async function runSimulation(options: {
   outputDir: string;
   serveReport: boolean;
   reportPort: number;
-  audienceDescription?: string | undefined;
   reporter: ReturnType<typeof createRunReporter>;
 }): Promise<void> {
   const startedAt = Date.now();
@@ -202,7 +199,6 @@ async function runSimulation(options: {
     seed: options.seed,
     concurrency: options.concurrency,
     outputDir: options.outputDir,
-    audienceDescription: options.audienceDescription,
     onProgress: (event) => {
       options.reporter.onProgress(event);
     },
@@ -297,30 +293,6 @@ async function serveReport(options: {
       void server.close().then(resolve).catch(reject);
     });
   });
-}
-
-async function promptForAudienceDescription(): Promise<string | undefined> {
-  if (!stdin.isTTY) return undefined;
-
-  console.log(
-    [
-      "Describe your target audience (optional).",
-      "\x1b[2mHints: industry (healthcare, finance, consumer tech…), age (teen, young adult, senior…),",
-      "       domain (productivity, wellness, food…), tech level (low / medium / high),",
-      "       role (student, creator, professional, founder…)",
-      "Leave blank for a diverse general audience.\x1b[0m",
-      "",
-    ].join("\n"),
-  );
-
-  const rl = createInterface({ input: stdin, output: stdout });
-  try {
-    const answer = (await rl.question("audience> ")).trim();
-    console.log("");
-    return answer.length > 0 ? answer : undefined;
-  } finally {
-    rl.close();
-  }
 }
 
 async function promptForProvider(): Promise<"codex" | "claude" | "copilot"> {
