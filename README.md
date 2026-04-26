@@ -66,10 +66,9 @@ The CLI calls out to an AI provider CLI that must already be installed and authe
 | `--output` | `.first-impressions/` | Where to write run artifacts |
 | `--ui-port` | random | Port for the browser UI server |
 
-Available persona sets:
+Persona presets live in `personas/sets/`.
 
-- `general`: broad consumer and professional mix
-- `tech-general`: tech-oriented personas across industries
+There are preset audience configurations there today, and if you want to customize or expand them, contributions are welcome.
 
 Run artifacts are written to `.first-impressions/runs/<run-id>/`.
 
