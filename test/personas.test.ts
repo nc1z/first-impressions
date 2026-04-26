@@ -8,31 +8,30 @@ describe("persona catalog", () => {
     expect(catalog).toHaveLength(100);
   });
 
-  it("keeps the general audience age distribution stable", async () => {
-    const personas = await selectRunPersonas({
-      count: 100,
-      mode: "general",
-      seed: 42,
-    });
+  it("loads the tech-general persona catalog", async () => {
+    const catalog = await loadPersonaCatalog("tech-general");
+    expect(catalog).toHaveLength(100);
+  });
 
-    const counts = personas.reduce<Record<string, number>>((accumulator, persona) => {
-      accumulator[persona.seed.ageBand] = (accumulator[persona.seed.ageBand] ?? 0) + 1;
-      return accumulator;
-    }, {});
+  it("returns the full general catalog without duplicates when count matches catalog size", async () => {
+    const [catalog, personas] = await Promise.all([
+      loadPersonaCatalog("general"),
+      selectRunPersonas({
+        count: 100,
+        personaSet: "general",
+        mode: "general",
+        seed: 42,
+      }),
+    ]);
 
-    expect(counts).toEqual({
-      teen: 5,
-      young_adult: 28,
-      adult: 42,
-      midlife: 18,
-      senior: 7,
-    });
+    expect(personas).toHaveLength(catalog.length);
+    expect(new Set(personas.map((persona) => persona.seed.id)).size).toBe(catalog.length);
   });
 
   it("reproduces the same persona mix for the same seed", async () => {
     const [firstRun, secondRun] = await Promise.all([
-      selectRunPersonas({ count: 20, mode: "general", seed: 111 }),
-      selectRunPersonas({ count: 20, mode: "general", seed: 111 }),
+      selectRunPersonas({ count: 20, personaSet: "general", mode: "general", seed: 111 }),
+      selectRunPersonas({ count: 20, personaSet: "general", mode: "general", seed: 111 }),
     ]);
 
     expect(firstRun).toEqual(secondRun);

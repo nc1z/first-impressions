@@ -1,9 +1,27 @@
 import path from "node:path";
 
-import type { AgeBand, PersonaOverlay, PersonaSeed, RunMode, RunPersona } from "./domain/types.js";
+import type { AgeBand, PersonaOverlay, PersonaSeed, PersonaSetId, RunMode, RunPersona } from "./domain/types.js";
 import { createRandomSource } from "./utils/random.js";
 
-const personaCatalogPath = path.resolve(process.cwd(), "personas", "general.json");
+const personaCatalogDirectory = path.resolve(process.cwd(), "personas");
+
+export const personaSetCatalogPaths: Record<PersonaSetId, string> = {
+  general: path.join(personaCatalogDirectory, "general.json"),
+  "tech-general": path.join(personaCatalogDirectory, "tech-general.json"),
+};
+
+export const personaSetChoices: Array<{ id: PersonaSetId; label: string; description: string }> = [
+  {
+    id: "general",
+    label: "general",
+    description: "Broad consumer and professional mix across the full catalog",
+  },
+  {
+    id: "tech-general",
+    label: "tech-general",
+    description: "Tech-oriented personas spanning different industries",
+  },
+];
 
 const generalAgeDistribution: Record<AgeBand, number> = {
   teen: 5,
@@ -56,18 +74,19 @@ export function describePersona(seed: PersonaSeed): string {
   return `${role} in ${industry}`;
 }
 
-export async function loadPersonaCatalog(): Promise<PersonaSeed[]> {
+export async function loadPersonaCatalog(personaSet: PersonaSetId = "general"): Promise<PersonaSeed[]> {
   const { readFile } = await import("node:fs/promises");
-  const raw = await readFile(personaCatalogPath, "utf8");
+  const raw = await readFile(personaSetCatalogPaths[personaSet], "utf8");
   return JSON.parse(raw) as PersonaSeed[];
 }
 
 export async function selectRunPersonas(options: {
   count: number;
+  personaSet: PersonaSetId;
   mode: RunMode;
   seed: number;
 }): Promise<RunPersona[]> {
-  const catalog = await loadPersonaCatalog();
+  const catalog = await loadPersonaCatalog(options.personaSet);
 
   if (catalog.length === 0) {
     throw new Error("Persona catalog is empty.");

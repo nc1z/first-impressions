@@ -9,7 +9,7 @@ import { stdin, stdout } from "node:process";
 import { Command } from "commander";
 import { stat } from "node:fs/promises";
 
-import { loadPersonaCatalog } from "./personas.js";
+import { loadPersonaCatalog, personaSetChoices } from "./personas.js";
 import { listProviderStatuses } from "./providers/index.js";
 import { executeRun } from "./run.js";
 import { listAvailableRuns } from "./runs.js";
@@ -25,6 +25,7 @@ program
   .version("0.1.0")
   .showHelpAfterError()
   .option("--provider <provider>", "Provider to use: codex, claude, copilot", "codex")
+  .option("--persona-set <set>", "Persona set to use: general, tech-general", "general")
   .option("--mode <mode>", "Persona distribution mode", "general")
   .option("--count <number>", "Number of personas to evaluate", "100")
   .option("--seed <number>", "Seed for reproducible persona selection")
@@ -43,8 +44,9 @@ program
       "Examples:",
       "  $ first-impressions",
       "  $ first-impressions --provider claude --count 25",
+      "  $ first-impressions --persona-set tech-general",
       '  $ first-impressions run "A browser extension that turns job posts into interview prep"',
-      "  $ first-impressions run --file ./idea.txt --provider claude --count 25",
+      "  $ first-impressions run --file ./idea.txt --provider claude --persona-set tech-general --count 25",
       "  $ first-impressions run --url https://example.com --provider copilot",
       "  $ first-impressions report <run-id>",
     ].join("\n"),
@@ -60,6 +62,11 @@ program.action(async (options) => {
     providerSource === "default" && stdin.isTTY
       ? await promptForProvider()
       : (options.provider as "codex" | "claude" | "copilot");
+  const personaSetSource = program.getOptionValueSource("personaSet");
+  const personaSet =
+    personaSetSource === "default" && stdin.isTTY
+      ? await promptForPersonaSet()
+      : parsePersonaSet(options.personaSet as string);
 
   const text = await promptForIdeaText(reporter);
   await runSimulation({
@@ -67,6 +74,7 @@ program.action(async (options) => {
     file: undefined,
     url: undefined,
     provider,
+    personaSet,
     mode: options.mode as "general" | "tagged-segment",
     count: Number(options.count),
     seed: options.seed ? Number(options.seed) : undefined,
@@ -86,6 +94,7 @@ program
   .option("--file <path>", "Read idea input from a local file")
   .option("--url <url>", "Read idea input from a URL")
   .option("--provider <provider>", "Provider to use: codex, claude, copilot", "codex")
+  .option("--persona-set <set>", "Persona set to use: general, tech-general", "general")
   .option("--mode <mode>", "Persona distribution mode", "general")
   .option("--count <number>", "Number of personas to evaluate", "100")
   .option("--seed <number>", "Seed for reproducible persona selection")
@@ -103,6 +112,7 @@ program
       file: options.file as string | undefined,
       url: options.url as string | undefined,
       provider: options.provider as "codex" | "claude" | "copilot",
+      personaSet: parsePersonaSet(options.personaSet as string),
       mode: options.mode as "general" | "tagged-segment",
       count: Number(options.count),
       seed: options.seed ? Number(options.seed) : undefined,
@@ -135,11 +145,13 @@ const personasCommand = program.command("personas").description("Inspect the per
 personasCommand
   .command("list")
   .description("List persona IDs and summaries.")
-  .action(async () => {
+  .option("--persona-set <set>", "Persona set to inspect: general, tech-general", "general")
+  .action(async (options) => {
     const reporter = createRunReporter();
     activeReporter = reporter;
     reporter.info([asciiBanner(), "Persona catalog snapshot:\n"]);
-    const catalog = await loadPersonaCatalog();
+    const personaSet = parsePersonaSet(options.personaSet as string);
+    const catalog = await loadPersonaCatalog(personaSet);
 
     for (const persona of catalog) {
       console.log(
@@ -179,6 +191,7 @@ async function runSimulation(options: {
   file?: string | undefined;
   url?: string | undefined;
   provider: "codex" | "claude" | "copilot";
+  personaSet: "general" | "tech-general";
   mode: "general" | "tagged-segment";
   count: number;
   seed?: number | undefined;
@@ -194,6 +207,7 @@ async function runSimulation(options: {
     file: options.file,
     url: options.url,
     provider: options.provider,
+    personaSet: options.personaSet,
     mode: options.mode,
     count: options.count,
     seed: options.seed,
@@ -208,7 +222,7 @@ async function runSimulation(options: {
   options.reporter.success([
     `Run ID       ${artifacts.manifest.runId}`,
     `Provider     ${artifacts.manifest.provider}`,
-    `Audience     ${artifacts.manifest.count} personas in ${artifacts.manifest.mode} mode`,
+    `Audience     ${artifacts.manifest.count} personas from ${artifacts.manifest.personaSet} set (${artifacts.manifest.mode} mode)`,
     `Elapsed      ${formatDuration(elapsedMs)}`,
     `Artifacts    ${runDirectory}`,
     `Report       ${path.join(runDirectory, "report", "index.html")}`,
@@ -355,6 +369,61 @@ async function promptForProvider(): Promise<"codex" | "claude" | "copilot"> {
   });
 }
 
+async function promptForPersonaSet(): Promise<"general" | "tech-general"> {
+  console.log("Choose an audience persona set:\n");
+
+  const renderList = (selected: number, firstRender: boolean) => {
+    if (!firstRender) {
+      stdout.write(`\x1b[${personaSetChoices.length + 1}A`);
+    }
+    for (let i = 0; i < personaSetChoices.length; i++) {
+      const set = personaSetChoices[i]!;
+      const line = `${set.label.padEnd(13)} ${set.description}`;
+      if (i === selected) {
+        stdout.write(`\r\x1b[K  \x1b[36m\x1b[1m> ${line}\x1b[0m\n`);
+      } else {
+        stdout.write(`\r\x1b[K    ${line}\n`);
+      }
+    }
+    stdout.write(`\r\x1b[K\x1b[2m  ↑↓ navigate  Enter select  (default: general)\x1b[0m\n`);
+  };
+
+  return new Promise<"general" | "tech-general">((resolve, reject) => {
+    let selected = personaSetChoices.findIndex((choice) => choice.id === "general");
+    renderList(selected, true);
+
+    emitKeypressEvents(stdin);
+    stdin.setRawMode(true);
+    stdin.resume();
+
+    const cleanup = () => {
+      stdin.setRawMode(false);
+      stdin.pause();
+      stdin.removeListener("keypress", onKeypress);
+    };
+
+    const onKeypress = (_str: string, key: Key) => {
+      if (key.name === "up") {
+        selected = Math.max(0, selected - 1);
+        renderList(selected, false);
+      } else if (key.name === "down") {
+        selected = Math.min(personaSetChoices.length - 1, selected + 1);
+        renderList(selected, false);
+      } else if (key.name === "return") {
+        cleanup();
+        stdout.write("\n");
+        resolve(personaSetChoices[selected]!.id);
+      } else if (key.ctrl && key.name === "c") {
+        cleanup();
+        stdout.write("\n");
+        reject(new Error("Cancelled."));
+      }
+    };
+
+    stdin.on("keypress", onKeypress);
+  });
+}
+
 async function promptForRunId(outputDir: string): Promise<string> {
   const runs = await listAvailableRuns(outputDir);
   if (runs.length === 0) {
@@ -419,4 +488,13 @@ async function promptForRunId(outputDir: string): Promise<string> {
 
     stdin.on("keypress", onKeypress);
   });
+}
+
+function parsePersonaSet(value: string): "general" | "tech-general" {
+  const match = personaSetChoices.find((choice) => choice.id === value);
+  if (!match) {
+    throw new Error(`Unsupported persona set "${value}". Use one of: ${personaSetChoices.map((choice) => choice.id).join(", ")}`);
+  }
+
+  return match.id;
 }

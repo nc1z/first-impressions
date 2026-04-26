@@ -1,7 +1,7 @@
 import path from "node:path";
 
 import { aggregateInsights } from "./analysis.js";
-import type { IdeaInput, PersonaReaction, ProviderName, RunArtifacts, RunMode, RunPersona } from "./domain/types.js";
+import type { IdeaInput, PersonaReaction, PersonaSetId, ProviderName, RunArtifacts, RunMode, RunPersona } from "./domain/types.js";
 import { resolveIdeaInput } from "./ingest.js";
 import { selectRunPersonas } from "./personas.js";
 import { createProviderAdapter } from "./providers/index.js";
@@ -15,6 +15,7 @@ export interface ExecuteRunOptions {
   file?: string | undefined;
   url?: string | undefined;
   provider: ProviderName;
+  personaSet: PersonaSetId;
   count: number;
   mode: RunMode;
   seed?: number | undefined;
@@ -62,9 +63,14 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
 
   emit({
     stage: "personas",
-    message: `Selecting ${options.count} personas`,
+    message: `Selecting ${options.count} personas from ${options.personaSet}`,
   });
-  const personas = await selectRunPersonas({ count: options.count, mode: options.mode, seed });
+  const personas = await selectRunPersonas({
+    count: options.count,
+    personaSet: options.personaSet,
+    mode: options.mode,
+    seed,
+  });
   emit({
     stage: "personas",
     message: "Personas ready",
@@ -134,6 +140,7 @@ export async function executeRun(options: ExecuteRunOptions): Promise<{ artifact
     manifest: {
       runId,
       provider: options.provider,
+      personaSet: options.personaSet,
       mode: options.mode,
       count: options.count,
       concurrency: options.concurrency,

@@ -364,7 +364,7 @@ function createReportHtml(artifacts: RunArtifacts): string {
 
   // HERO
   document.getElementById('hero-meta').textContent =
-    'First Impressions \u00b7 ' + manifest.count + ' personas \u00b7 ' +
+    'First Impressions \u00b7 ' + manifest.personaSet + ' set \u00b7 ' + manifest.count + ' personas \u00b7 ' +
     new Date(manifest.createdAt).toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
   document.getElementById('hero-title').textContent = brief.title;
   document.getElementById('hero-summary').textContent = brief.oneLineSummary;
@@ -548,8 +548,8 @@ function createReportHtml(artifacts: RunArtifacts): string {
   })();
 
   document.getElementById('footer').textContent =
-    'First Impressions \u00b7 ' + manifest.provider + ' \u00b7 ' + manifest.count +
-    ' personas \u00b7 ' + new Date(manifest.createdAt).toLocaleString();
+    'First Impressions \u00b7 ' + manifest.provider + ' \u00b7 ' + manifest.personaSet +
+    ' \u00b7 ' + manifest.count + ' personas \u00b7 ' + new Date(manifest.createdAt).toLocaleString();
 
   window.toggleTable = function () {
     var body = document.getElementById('table-body');

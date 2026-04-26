@@ -14,6 +14,7 @@ describe("generateReport", () => {
       manifest: {
         runId: "run-1",
         provider: "codex",
+        personaSet: "general",
         mode: "general",
         count: 1,
         concurrency: 1,

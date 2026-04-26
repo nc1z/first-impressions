@@ -4,6 +4,8 @@ export type InputKind = "text" | "file" | "url";
 
 export type RunMode = "general" | "tagged-segment";
 
+export type PersonaSetId = "general" | "tech-general";
+
 export type AgeBand = "teen" | "young_adult" | "adult" | "midlife" | "senior";
 
 export type Sex = "female" | "male" | "unspecified";
@@ -119,6 +121,7 @@ export interface AggregatedInsights {
 export interface RunManifest {
   runId: string;
   provider: ProviderName;
+  personaSet: PersonaSetId;
   mode: RunMode;
   count: number;
   concurrency: number;

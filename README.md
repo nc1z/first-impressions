@@ -32,6 +32,7 @@ For scripted or explicit-input runs:
 pnpm fi run "Your idea here" --provider claude
 pnpm fi run --file ./idea.txt --provider claude
 pnpm fi run --url https://example.com --provider claude
+pnpm fi run "Your idea here" --persona-set tech-general
 ```
 
 Open a report from a previous run:
@@ -56,10 +57,17 @@ The CLI calls out to an AI provider CLI that must already be installed and authe
 | Flag | Default | Description |
 |---|---|---|
 | `--provider` | — | Which provider CLI to use |
+| `--persona-set` | `general` | Which audience/persona set to use |
+| `--mode` | `general` | Persona distribution mode inside the chosen set |
 | `--count` | `100` | Number of personas to run |
 | `--seed` | auto | Seed for reproducible runs |
 | `--concurrency` | auto | Max parallel evaluations |
 | `--output` | `.first-impressions/` | Where to write run artifacts |
+
+Available persona sets:
+
+- `general`: broad consumer and professional mix
+- `tech-general`: tech-oriented personas across industries
 
 Run artifacts are written to `.first-impressions/runs/<run-id>/`.
 
