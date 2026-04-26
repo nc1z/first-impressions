@@ -117,6 +117,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);
 .nav-arrow:hover:not(:disabled){background:#f4f4f4;border-color:var(--border-hover)}
 .nav-arrow:disabled{color:var(--muted);cursor:default}
 
+/* ── loading dots ── */
+@keyframes dot-bounce{0%,80%,100%{transform:translateY(0);opacity:.35}40%{transform:translateY(-5px);opacity:1}}
+.loading-dots{display:flex;gap:5px;align-items:center;padding:2px 0}
+.loading-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6);
+  animation:dot-bounce 1.2s ease-in-out infinite}
+.loading-dots span:nth-child(2){animation-delay:.18s}
+.loading-dots span:nth-child(3){animation-delay:.36s}
+
 /* ━━━━ RUNNING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .run-topbar{padding:12px 24px 10px;background:var(--surface);
   border-bottom:1px solid var(--border);flex-shrink:0}
@@ -356,8 +364,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);
     <!-- presenter pitch bubble -->
     <div id="presenter-bubble-anchor">
       <div id="presenter-bubble">
-        <div id="presenter-bubble-label">Your pitch</div>
-        <div id="presenter-bubble-text"></div>
+        <div id="presenter-bubble-label">Summarising your pitch&hellip;</div>
+        <div id="presenter-bubble-loading" class="loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div id="presenter-bubble-text" style="display:none"></div>
       </div>
     </div>
 
@@ -397,6 +408,7 @@ var tTotal = 0;
 var tCompleted = 0;
 var evalQueue = [];       // buffers evaluation events during presenter intro
 var presenterDone = false;
+var showPresenterSummary = null; // set by runPresenter, called when brief arrives
 
 // ── row layout (panoramic arcs) ───────────────────────────
 var ROW_DEFS = [
@@ -514,12 +526,9 @@ document.addEventListener('keydown', function(e) {
 
 // ━━━━ SUBMIT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-var pitchText = '';
-
 function doSubmit() {
   var idea = document.getElementById('idea').value.trim();
   if (!idea) { document.getElementById('idea').focus(); return; }
-  pitchText = idea;
   var btn = document.getElementById('ok-3');
   btn.disabled = true;
   var count = parseInt(document.getElementById('count-slider').value, 10);
@@ -558,7 +567,7 @@ function toRunning() {
     easing:'cubicBezier(.4,0,.2,1)',
     complete: function() {
       buildSeats();
-      runPresenter(pitchText, function() {
+      showPresenterSummary = runPresenter(function() {
         presenterDone = true;
         while (evalQueue.length) addPersona(evalQueue.shift());
       });
@@ -640,16 +649,18 @@ window.addEventListener('resize', function() {
 
 // ━━━━ PRESENTER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-function runPresenter(text, onDone) {
+// Returns a showSummary(brief) function the caller invokes when the brief arrives.
+function runPresenter(onDone) {
   document.getElementById('presenter-img').src =
     'https://api.dicebear.com/7.x/notionists/svg?seed=presenter-you&radius=50';
 
-  var presEl   = document.getElementById('presenter');
-  var bubbleEl = document.getElementById('presenter-bubble');
-  var textEl   = document.getElementById('presenter-bubble-text');
+  var presEl      = document.getElementById('presenter');
+  var bubbleEl    = document.getElementById('presenter-bubble');
+  var labelEl     = document.getElementById('presenter-bubble-label');
+  var loadingEl   = document.getElementById('presenter-bubble-loading');
+  var textEl      = document.getElementById('presenter-bubble-text');
 
-  textEl.textContent = text;
-  setRunStatus('Pitching to the audience\u2026');
+  setRunStatus('Summarising your pitch\u2026');
 
   // Walk presenter on stage
   anime({ targets: presEl,
@@ -658,15 +669,13 @@ function runPresenter(text, onDone) {
     begin: function() { presEl.style.opacity = '0'; },
   });
 
-  // Pop bubble open
+  // Pop bubble open with loading dots
   setTimeout(function() {
     anime({ targets: bubbleEl, opacity: [0, 1], scale: [0, 1],
       duration: 420, easing: 'spring(1, 90, 12, 0)' });
   }, 500);
 
-  // Reading time based on text length, then exit
-  var readMs = Math.min(4500, Math.max(2000, text.length * 22));
-  setTimeout(function() {
+  function exitPresenter() {
     bubbleEl.style.transition = 'opacity 0.2s ease';
     bubbleEl.style.opacity = '0';
     setTimeout(function() {
@@ -679,7 +688,20 @@ function runPresenter(text, onDone) {
         },
       });
     }, 300);
-  }, readMs + 500);
+  }
+
+  // Called by onEvent when summary arrives
+  return function showSummary(brief) {
+    // Swap loading dots → real text
+    labelEl.textContent = brief.title;
+    loadingEl.style.display = 'none';
+    textEl.textContent = brief.oneLineSummary;
+    textEl.style.display = 'block';
+
+    // Reading time, then exit
+    var readMs = Math.min(4500, Math.max(2000, brief.oneLineSummary.length * 22));
+    setTimeout(exitPresenter, readMs);
+  };
 }
 
 // ━━━━ SSE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -694,6 +716,10 @@ function onEvent(ev) {
   if (ev.stage === 'summary' && ev.brief) {
     var el = document.getElementById('brief-title');
     el.textContent = ev.brief.title; el.classList.add('visible');
+    if (showPresenterSummary) {
+      showPresenterSummary(ev.brief);
+      showPresenterSummary = null; // only call once
+    }
     return;
   }
   if (ev.stage === 'personas' && typeof ev.total === 'number') {
