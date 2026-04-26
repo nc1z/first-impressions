@@ -18,7 +18,8 @@
     "fi": "tsx src/cli.ts",
     "lint": "tsc --noEmit -p tsconfig.json",
     "start": "node dist/cli.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate": "tsx personas/generate.ts"
   },
   "dependencies": {
     "commander": "^14.0.1",
