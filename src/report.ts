@@ -23,159 +23,151 @@ function createReportHtml(artifacts: RunArtifacts): string {
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --navy:#0f172a;--slate:#334155;--muted:#64748b;
-      --border:#e2e8f0;--bg:#f8fafc;--card:#fff;
-      --green:#16a34a;--green-soft:#f0fdf4;--green-border:#bbf7d0;
-      --amber:#d97706;--amber-soft:#fffbeb;
-      --red:#dc2626;--red-soft:#fef2f2;
+      --bg:#fafaf8;--surface:#fff;--text:#18181b;--mid:#52525b;--muted:#a1a1aa;
+      --border:#e4e4e7;--accent:#16a34a;
+      --green:#15803d;--green-soft:rgba(21,128,61,.06);
+      --amber:#d97706;--amber-soft:rgba(217,119,6,.07);
+      --red:#dc2626;--red-soft:rgba(220,38,38,.06);
     }
-    body{
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      background:var(--bg);color:var(--navy);line-height:1.6;
-    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
     .s{padding:72px 24px}
-    .s--dark{background:var(--navy);color:#f8fafc}
-    .s--white{background:var(--card)}
+    .s--hero{background:var(--text);color:#fafaf8}
+    .s--white{background:var(--surface)}
     .s--gray{background:var(--bg)}
-    .s--charcoal{background:#1e293b;color:#f8fafc}
     .wrap{max-width:760px;margin:0 auto}
 
-    /* EYEBROW / DIVIDER */
-    .eyebrow{
-      font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-      font-family:ui-monospace,'SFMono-Regular',monospace;color:var(--muted);
-      margin-bottom:24px;display:flex;align-items:center;gap:12px;
-    }
+    /* EYEBROW */
+    .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:28px;display:flex;align-items:center;gap:12px}
     .eyebrow::after{content:"";flex:1;height:1px;background:var(--border)}
-    .s--charcoal .eyebrow{color:rgba(248,250,252,.35)}
-    .s--charcoal .eyebrow::after{background:rgba(255,255,255,.1)}
+    .s--hero .eyebrow{color:rgba(255,255,255,.35)}
+    .s--hero .eyebrow::after{background:rgba(255,255,255,.1)}
 
     /* HERO */
-    .hero-meta{font-size:13px;opacity:.5;margin-bottom:20px;font-family:ui-monospace,monospace;letter-spacing:.04em}
-    .hero-title{
-      font-size:clamp(44px,9vw,84px);font-weight:800;line-height:.95;
-      letter-spacing:-.03em;color:#f8fafc;margin-bottom:20px;
-    }
-    .hero-summary{font-size:19px;line-height:1.5;max-width:560px;color:rgba(248,250,252,.6)}
+    .hero-meta{font-size:12px;letter-spacing:.06em;opacity:.4;margin-bottom:24px;
+      font-family:ui-monospace,monospace}
+    .hero-title{font-size:clamp(42px,8vw,80px);font-weight:800;line-height:.95;
+      letter-spacing:-.03em;color:#fff;margin-bottom:20px}
+    .hero-summary{font-size:18px;line-height:1.55;max-width:560px;color:rgba(255,255,255,.55)}
 
     /* VERDICT */
     .verdict-wrap{text-align:center}
-    .score-ring{display:block;margin:0 auto 20px}
-    .verdict-label{font-size:24px;font-weight:800;margin-bottom:6px}
-    .verdict-sub{color:var(--muted);font-size:14px;margin-bottom:28px}
-    .pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-    .pill{
-      background:var(--bg);border:1px solid var(--border);border-radius:999px;
-      padding:8px 20px;font-size:14px;font-weight:500;display:flex;gap:6px;align-items:center;
-    }
+    .score-ring{display:block;margin:0 auto 24px}
+    .verdict-label{font-size:22px;font-weight:800;margin-bottom:6px}
+    .verdict-sub{color:var(--muted);font-size:13px;margin-bottom:32px}
+    .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+    .pill{background:var(--bg);border:1px solid var(--border);border-radius:999px;
+      padding:7px 18px;font-size:13px;font-weight:500;display:flex;gap:6px;align-items:center}
     .pill b{font-weight:800}
 
     /* AUDIENCE FIT */
     .fit-row{display:grid;grid-template-columns:160px 1fr;gap:48px;align-items:center}
     .fit-donut-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
-    .fit-center{
-      position:absolute;inset:0;display:flex;flex-direction:column;
-      align-items:center;justify-content:center;pointer-events:none;
-    }
-    .fit-center-num{font-size:30px;font-weight:800;line-height:1;color:var(--green)}
+    .fit-center{position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;pointer-events:none}
+    .fit-center-num{font-size:30px;font-weight:800;line-height:1;color:var(--accent)}
     .fit-center-sub{font-size:11px;color:var(--muted);margin-top:2px}
     .fit-legend{display:flex;flex-direction:column;gap:14px}
     .fit-row-item{display:flex;align-items:center;gap:12px}
-    .fit-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .fit-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
     .fit-name{flex:1;font-size:15px}
     .fit-pct{font-size:20px;font-weight:800}
     .actions{display:flex;gap:32px;margin-top:40px;flex-wrap:wrap}
     .action{text-align:center}
-    .action-num{font-size:38px;font-weight:800;line-height:1}
-    .action-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+    .action-num{font-size:36px;font-weight:800;line-height:1}
+    .action-label{font-size:10px;color:var(--muted);text-transform:uppercase;
+      letter-spacing:.09em;margin-top:4px}
 
     /* QUOTES */
-    .quotes{display:grid;gap:14px}
-    .quote-card{
-      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-      border-radius:16px;padding:28px 28px 20px;
-    }
-    .quote-mark{font-size:52px;line-height:.5;opacity:.18;font-family:Georgia,serif;margin-bottom:14px;display:block}
-    .quote-text{font-size:18px;line-height:1.55;font-style:italic;margin-bottom:18px}
-    .quote-byline{font-size:13px;color:rgba(248,250,252,.45);display:flex;align-items:center;gap:8px}
-    .quote-badge{
-      margin-left:auto;font-size:11px;font-weight:700;font-style:normal;
-      padding:3px 10px;border-radius:999px;white-space:nowrap;
-    }
-    .badge-pos{background:rgba(22,163,74,.2);color:#4ade80}
-    .badge-mid{background:rgba(217,119,6,.2);color:#fbbf24}
-    .badge-neg{background:rgba(220,38,38,.2);color:#f87171}
+    .quotes{display:grid;gap:12px}
+    .quote-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+      border-radius:14px;padding:24px}
+    .quote-text{font-size:17px;line-height:1.6;margin-bottom:18px;
+      color:rgba(255,255,255,.85)}
+    .quote-byline{display:flex;align-items:center;gap:10px}
+    .q-av{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);
+      flex-shrink:0;overflow:hidden}
+    .q-av img{width:100%;height:100%;display:block}
+    .q-name{font-size:13px;color:rgba(255,255,255,.45);flex:1}
+    .quote-badge{font-size:11px;font-weight:700;padding:3px 10px;
+      border-radius:999px;white-space:nowrap}
+    .badge-pos{background:rgba(22,163,74,.25);color:#4ade80}
+    .badge-mid{background:rgba(217,119,6,.25);color:#fbbf24}
+    .badge-neg{background:rgba(220,38,38,.25);color:#f87171}
 
     /* INSIGHTS */
     .two-col{display:grid;grid-template-columns:1fr 1fr;gap:32px}
-    .insight-head{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+    .insight-head{font-size:12px;font-weight:700;text-transform:uppercase;
+      letter-spacing:.09em;margin-bottom:14px}
     .insight-head--pos{color:var(--green)}
     .insight-head--neg{color:var(--red)}
-    .insight-list{display:flex;flex-direction:column;gap:8px}
-    .insight-item{
-      display:flex;align-items:flex-start;gap:10px;
-      padding:12px 14px;border-radius:10px;border-left:3px solid;font-size:14px;line-height:1.4;
-    }
+    .insight-list{display:flex;flex-direction:column;gap:7px}
+    .insight-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;
+      border-radius:10px;border-left:3px solid;font-size:13.5px;line-height:1.45}
     .insight-item--pos{background:var(--green-soft);border-color:var(--green)}
     .insight-item--neg{background:var(--red-soft);border-color:var(--red)}
-    .insight-count{
-      flex-shrink:0;font-size:11px;font-weight:700;background:rgba(0,0,0,.08);
-      border-radius:999px;padding:2px 7px;margin-top:1px;white-space:nowrap;
-    }
+    .insight-count{flex-shrink:0;font-size:11px;font-weight:700;
+      background:rgba(0,0,0,.07);border-radius:999px;
+      padding:2px 7px;margin-top:1px;white-space:nowrap}
 
     /* BARS */
     .two-col-bars{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-    .bars-head{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:16px}
+    .bars-head{font-size:11px;font-weight:700;text-transform:uppercase;
+      letter-spacing:.09em;color:var(--muted);margin-bottom:18px}
     .bar-list{display:flex;flex-direction:column;gap:16px}
     .bar-meta-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}
     .bar-name{font-weight:500}
     .bar-meta-text{color:var(--muted);font-size:12px}
-    .bar-track{height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+    .bar-track{height:5px;background:var(--border);border-radius:999px;overflow:hidden}
     .bar-fill{height:100%;border-radius:999px}
 
     /* PROFILES */
-    .profile-head{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+    .profile-head{font-size:11px;font-weight:700;text-transform:uppercase;
+      letter-spacing:.09em;margin-bottom:16px}
     .profile-head--sup{color:var(--green)}
     .profile-head--skep{color:var(--red)}
     .profile-list{display:flex;flex-direction:column;gap:10px}
-    .profile-card{padding:14px;border-radius:10px;border:1px solid var(--border);font-size:13px}
+    .profile-card{padding:14px 16px;border-radius:12px;border:1px solid var(--border);
+      font-size:13px;display:grid;grid-template-columns:44px 1fr;
+      column-gap:12px;align-items:start}
     .profile-card--sup{border-left:3px solid var(--green)}
     .profile-card--skep{border-left:3px solid var(--red)}
-    .profile-name{font-weight:700;margin-bottom:2px}
-    .profile-who{color:var(--muted);font-size:12px;margin-bottom:6px}
-    .profile-score{font-weight:800;font-size:14px}
+    .p-av{width:44px;height:44px;border-radius:50%;background:var(--bg);
+      overflow:hidden;grid-row:1/3;align-self:center;flex-shrink:0}
+    .p-av img{width:100%;height:100%;display:block}
+    .profile-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+    .profile-name{font-weight:700}
+    .profile-who{color:var(--muted);font-size:12px}
+    .profile-score{font-weight:800;font-size:13px;margin-left:auto;white-space:nowrap}
     .profile-score--sup{color:var(--green)}
     .profile-score--skep{color:var(--red)}
-    .profile-quote{font-style:italic;color:var(--slate);line-height:1.4;margin-top:8px;font-size:13px}
+    .profile-quote{font-style:italic;color:var(--mid);line-height:1.45;
+      margin-top:4px;font-size:12.5px;grid-column:2}
 
-    /* TABLE TOGGLE */
-    .toggle-btn{
-      display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;
-      font-weight:600;background:none;border:none;color:var(--navy);
-      margin-bottom:20px;padding:0;
-    }
+    /* TABLE */
+    .toggle-btn{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;
+      font-weight:600;background:none;border:none;color:var(--text);margin-bottom:20px;padding:0}
     .toggle-btn svg{transition:transform .2s}
     .toggle-btn.open svg{transform:rotate(180deg)}
     .table-wrap{overflow-x:auto}
     table{width:100%;border-collapse:collapse;font-size:13px}
-    th{
-      text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);
-      font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;
-    }
-    td{padding:12px;border-bottom:1px solid var(--border);vertical-align:top}
+    th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);
+      font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+      color:var(--muted);font-weight:700}
+    td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
     tr:last-child td{border-bottom:none}
-    tr:hover td{background:var(--bg)}
+    tr:hover td{background:#f4f4f1}
+    .t-av{width:32px;height:32px;border-radius:50%;background:var(--bg);
+      overflow:hidden;flex-shrink:0}
+    .t-av img{width:100%;height:100%;display:block}
+    .t-name-cell{display:flex;align-items:center;gap:10px}
     .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-    select{
-      border:1px solid var(--border);border-radius:8px;padding:8px 12px;
-      font-size:13px;background:var(--card);color:var(--navy);cursor:pointer;
-    }
+    select{border:1px solid var(--border);border-radius:8px;padding:8px 12px;
+      font-size:13px;background:var(--surface);color:var(--text);cursor:pointer}
 
-    /* FOOTER */
-    footer{
-      text-align:center;padding:40px 24px;font-size:13px;color:var(--muted);
-      border-top:1px solid var(--border);
-    }
+    footer{text-align:center;padding:40px 24px;font-size:12px;color:var(--muted);
+      border-top:1px solid var(--border)}
 
     @media(max-width:640px){
       .fit-row,.two-col,.two-col-bars{grid-template-columns:1fr}
@@ -186,8 +178,9 @@ function createReportHtml(artifacts: RunArtifacts): string {
 <body>
 
 <!-- HERO -->
-<section class="s s--dark">
+<section class="s s--hero">
   <div class="wrap">
+    <p class="eyebrow">First Impressions Report</p>
     <p class="hero-meta" id="hero-meta"></p>
     <h1 class="hero-title" id="hero-title"></h1>
     <p class="hero-summary" id="hero-summary"></p>
@@ -236,7 +229,7 @@ function createReportHtml(artifacts: RunArtifacts): string {
 </section>
 
 <!-- QUOTES -->
-<section class="s s--charcoal" id="voices-section">
+<section class="s s--hero" id="voices-section">
   <div class="wrap">
     <p class="eyebrow">What They Said</p>
     <div class="quotes" id="quotes"></div>
@@ -335,6 +328,9 @@ function createReportHtml(artifacts: RunArtifacts): string {
   const { brief, manifest, insights, personas, responses } = data;
   const personaById = new Map(personas.map(p => [p.seed.id, p]));
 
+  function av(name) {
+    return 'https://api.dicebear.com/7.x/notionists/svg?seed=' + encodeURIComponent(name) + '&radius=50';
+  }
   function sc(s) { return s >= 70 ? '#16a34a' : s >= 45 ? '#d97706' : '#dc2626'; }
   function sl(s) { return s >= 70 ? 'Positive Reception' : s >= 45 ? 'Mixed Reception' : 'Skeptical Reception'; }
   function esc(s) {
@@ -446,10 +442,10 @@ function createReportHtml(artifacts: RunArtifacts): string {
     document.getElementById('quotes').innerHTML = quotes.map(function (q) {
       var cls = q.sentiment === 'positive' ? 'badge-pos' : q.sentiment === 'negative' ? 'badge-neg' : 'badge-mid';
       return \`<div class="quote-card">
-        <span class="quote-mark">&#8220;</span>
-        <p class="quote-text">\${esc(q.quote)}</p>
+        <p class="quote-text">\u201c\${esc(q.quote)}\u201d</p>
         <div class="quote-byline">
-          <span>\${esc(q.name)} &middot; \${esc(q.description)}</span>
+          <div class="q-av"><img src="\${av(q.name)}" loading="lazy" alt=""></div>
+          <span class="q-name">\${esc(q.name)} &middot; \${esc(q.description)}</span>
           <span class="quote-badge \${cls}">\${q.score}/100</span>
         </div>
       </div>\`;
@@ -498,9 +494,12 @@ function createReportHtml(artifacts: RunArtifacts): string {
       var name = p ? p.seed.name : item.personaId;
       var who = p ? personaDesc(p.seed) : '';
       return \`<div class="profile-card profile-card--\${cls}">
-        <div class="profile-name">\${esc(name)}</div>
-        <div class="profile-who">\${esc(who)}</div>
-        <div class="profile-score profile-score--\${cls}">\${item.score}/100</div>
+        <div class="p-av"><img src="\${av(name)}" loading="lazy" alt=""></div>
+        <div class="profile-top">
+          <span class="profile-name">\${esc(name)}</span>
+          <span class="profile-who">\${esc(who)}</span>
+          <span class="profile-score profile-score--\${cls}">\${item.score}/100</span>
+        </div>
         \${r ? '<div class="profile-quote">\u201c' + esc(r.shortReaction) + '\u201d</div>' : ''}
       </div>\`;
     }).join('');
@@ -530,14 +529,20 @@ function createReportHtml(artifacts: RunArtifacts): string {
       });
       document.getElementById('responses').innerHTML = rows.map(function (r) {
         var p = personaById.get(r.personaId);
+        var name = p ? p.seed.name : r.personaId;
         return \`<tr>
           <td>
-            <strong>\${esc(p ? p.seed.name : r.personaId)}</strong>
-            <div style="color:#64748b;font-size:11px;margin-top:2px">\${esc(p ? personaDesc(p.seed) : '')}</div>
+            <div class="t-name-cell">
+              <div class="t-av"><img src="\${av(name)}" loading="lazy" alt=""></div>
+              <div>
+                <strong>\${esc(name)}</strong>
+                <div style="color:var(--muted);font-size:11px;margin-top:1px">\${esc(p ? personaDesc(p.seed) : '')}</div>
+              </div>
+            </div>
           </td>
           <td><span style="font-weight:800;color:\${sc(r.reactionScore)}">\${r.reactionScore}</span></td>
-          <td style="max-width:260px;color:#334155;font-style:italic">\${esc(r.shortReaction)}</td>
-          <td style="max-width:200px;color:#64748b;font-size:12px">\${esc(r.mainConcern)}</td>
+          <td style="max-width:260px;color:var(--mid);font-style:italic">\${esc(r.shortReaction)}</td>
+          <td style="max-width:200px;color:var(--muted);font-size:12px">\${esc(r.mainConcern)}</td>
         </tr>\`;
       }).join('');
     }
