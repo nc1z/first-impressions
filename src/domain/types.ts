@@ -60,6 +60,8 @@ export interface RunPersona {
   seed: PersonaSeed;
   overlay: PersonaOverlay;
   personaPromptSummary: string;
+  reactionStyleInstruction: string;
+  reactionOpeningExamples: string[];
 }
 
 export interface PersonaReaction {

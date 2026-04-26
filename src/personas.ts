@@ -1,5 +1,6 @@
 import path from "node:path";
 
+import { REACTION_OPENING_EXAMPLES } from "./constants.js";
 import type { AgeBand, PersonaOverlay, PersonaSeed, PersonaSetId, RunMode, RunPersona } from "./domain/types.js";
 import { createRandomSource } from "./utils/random.js";
 
@@ -107,6 +108,8 @@ export async function selectRunPersonas(options: {
       seed,
       overlay,
       personaPromptSummary: createPersonaPromptSummary(seed, overlay),
+      reactionStyleInstruction: createReactionStyleInstruction(random),
+      reactionOpeningExamples: createReactionOpeningExamples(random),
     };
   });
 }
@@ -192,4 +195,24 @@ export function createPersonaPromptSummary(seed: PersonaSeed, overlay: PersonaOv
     `Overlay: ${overlay.tone} tone, novelty appetite ${overlay.noveltyAppetite}/100, budget sensitivity ${overlay.budgetSensitivity}/100, clarity tolerance ${overlay.clarityTolerance}/100, speed preference ${overlay.speedPreference}/100.`,
     `Context: ${seed.summary}`,
   ].join(" ");
+}
+
+export function createReactionStyleInstruction(random: ReturnType<typeof createRandomSource>): string {
+  return random.pick([
+    "Deliver `shortReaction` in a polished, articulate style with complete sentences and no slang.",
+    "Deliver `shortReaction` in a blunt, clipped style with crisp phrasing and no filler.",
+    "Deliver `shortReaction` in a warm, conversational style, like a real person reacting out loud.",
+    "Deliver `shortReaction` in a measured, thoughtful style with clear wording and no slang.",
+    "Deliver `shortReaction` in a casual spoken style. Natural interjections like 'yeah', 'nah', or 'haha' are allowed if they fit organically.",
+    "Deliver `shortReaction` in an energetic, informal style, but keep it believable and not exaggerated.",
+    "Deliver `shortReaction` in a direct, skeptical style with short everyday wording.",
+    "Deliver `shortReaction` in a friendly, plainspoken style that sounds natural when read aloud.",
+  ]);
+}
+
+export function createReactionOpeningExamples(
+  random: ReturnType<typeof createRandomSource>,
+  count = 5,
+): string[] {
+  return random.shuffle([...REACTION_OPENING_EXAMPLES]).slice(0, count);
 }

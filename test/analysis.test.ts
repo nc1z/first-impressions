@@ -32,6 +32,8 @@ const personas: RunPersona[] = [
       speedPreference: 70,
     },
     personaPromptSummary: "Adult productivity manager.",
+    reactionStyleInstruction: "Deliver `shortReaction` in a measured, thoughtful style with clear wording and no slang.",
+    reactionOpeningExamples: ["Honestly,", "Feels promising, but", "Here's where I hesitate:"],
   },
   {
     seed: {
@@ -61,6 +63,8 @@ const personas: RunPersona[] = [
       speedPreference: 85,
     },
     personaPromptSummary: "Young adult learning student.",
+    reactionStyleInstruction: "Deliver `shortReaction` in a casual spoken style. Natural interjections like 'yeah', 'nah', or 'haha' are allowed if they fit organically.",
+    reactionOpeningExamples: ["Yo,", "Haha,", "Sounds useful, but"],
   },
 ];
 
