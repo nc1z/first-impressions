@@ -417,6 +417,7 @@ var ROW_DEFS = [
   { n: 16, sz: 39, baseY: 0.55, aFrac: 0.46, b: 50,  spread: 81, op: 0.73 },
   { n: 19, sz: 31, baseY: 0.39, aFrac: 0.47, b: 68,  spread: 82, op: 0.58 },
   { n: 22, sz: 25, baseY: 0.25, aFrac: 0.48, b: 86,  spread: 83, op: 0.43 },
+  { n: 20, sz: 20, baseY: 0.13, aFrac: 0.49, b: 104, spread: 84, op: 0.30 },
 ];
 
 function shuffle(arr) {
