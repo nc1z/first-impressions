@@ -18,12 +18,12 @@ Run it:
 pnpm fi
 ```
 
-You will see:
+This opens the browser UI. Fill in the form and watch your audience react in real time.
 
-```text
-You are now in front of an audience of 100 people.
-Share your project or idea.
-idea>
+To run in the terminal instead:
+
+```sh
+pnpm fi --headless
 ```
 
 For scripted or explicit-input runs:
@@ -56,6 +56,7 @@ The CLI calls out to an AI provider CLI that must already be installed and authe
 
 | Flag | Default | Description |
 |---|---|---|
+| `--headless` | — | Skip the browser UI and run in terminal mode |
 | `--provider` | — | Which provider CLI to use |
 | `--persona-set` | `general` | Which audience/persona set to use |
 | `--mode` | `general` | Persona distribution mode inside the chosen set |
@@ -63,6 +64,7 @@ The CLI calls out to an AI provider CLI that must already be installed and authe
 | `--seed` | auto | Seed for reproducible runs |
 | `--concurrency` | auto | Max parallel evaluations |
 | `--output` | `.first-impressions/` | Where to write run artifacts |
+| `--ui-port` | random | Port for the browser UI server |
 
 Available persona sets:
 
