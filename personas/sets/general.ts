@@ -1,0 +1,63 @@
+import type { CatalogConfig } from "../generator.js";
+import { params } from "../params.general.js";
+
+const domains: Record<string, string[]> = {
+  technology: ["software", "gaming", "productivity", "ai", "hardware", "developer_tools", "cybersecurity"],
+  finance: ["banking", "investing", "fintech", "personal_finance", "trading"],
+  healthcare: ["clinical", "wellness", "mental_health", "fitness", "health_tech"],
+  education: ["k12", "higher_ed", "e_learning", "tutoring", "career_development"],
+  media_entertainment: ["film", "music", "gaming", "social_media", "content_creation", "podcasting"],
+  retail_consumer_goods: ["fashion", "beauty", "home_goods", "food_beverage", "electronics"],
+  food_hospitality: ["restaurants", "travel", "events", "food_delivery"],
+  professional_services: ["consulting", "marketing", "hr", "accounting"],
+  manufacturing_industry: ["production", "supply_chain", "industrial", "quality"],
+  transportation_logistics: ["shipping", "mobility", "delivery", "fleet"],
+  energy_utilities: ["renewable_energy", "utilities", "oil_gas"],
+  real_estate_construction: ["residential", "commercial", "construction", "property"],
+  government_public_sector: ["policy", "public_safety", "civic_tech", "social_services"],
+  nonprofit_social: ["community", "advocacy", "social_impact", "volunteering"],
+  environment_cleantech: ["sustainability", "clean_energy", "conservation"],
+  agriculture: ["farming", "agtech", "food_production"],
+  telecommunications: ["mobile", "broadband", "networking"],
+  aerospace_defense: ["aerospace", "defense", "aviation"],
+  legal: ["corporate_law", "compliance", "legal_tech", "litigation"],
+  life_sciences: ["biotech", "pharma", "medical_devices", "clinical_research"],
+  automotive: ["electric_vehicles", "automotive_tech", "fleet"],
+  sports_recreation: ["fitness", "sports", "outdoor", "wellness"],
+  insurance: ["health_insurance", "property_insurance", "life_insurance"],
+  mining_resources: ["mining", "natural_resources", "commodities"],
+};
+
+const roleFamilies: Record<string, string[]> = {
+  technology: ["engineer", "product_manager", "designer", "data_scientist", "developer"],
+  finance: ["analyst", "advisor", "accountant", "trader", "manager"],
+  healthcare: ["clinician", "nurse", "administrator", "therapist", "researcher"],
+  education: ["teacher", "administrator", "researcher", "instructor", "counselor"],
+  media_entertainment: ["creator", "producer", "writer", "editor", "performer"],
+  retail_consumer_goods: ["buyer", "manager", "marketer", "merchandiser"],
+  food_hospitality: ["chef", "manager", "server", "event_planner"],
+  professional_services: ["consultant", "advisor", "manager", "specialist"],
+  manufacturing_industry: ["operator", "engineer", "technician", "manager"],
+  transportation_logistics: ["coordinator", "driver", "planner", "manager"],
+  energy_utilities: ["engineer", "technician", "analyst", "manager"],
+  real_estate_construction: ["agent", "developer", "contractor", "property_manager"],
+  government_public_sector: ["civil_servant", "administrator", "officer", "analyst"],
+  nonprofit_social: ["coordinator", "advocate", "program_manager", "volunteer"],
+  environment_cleantech: ["scientist", "engineer", "advocate", "manager"],
+  agriculture: ["farmer", "agronomist", "technician", "manager"],
+  telecommunications: ["engineer", "technician", "sales", "manager"],
+  aerospace_defense: ["engineer", "analyst", "technician", "manager"],
+  legal: ["attorney", "paralegal", "compliance_officer", "counsel"],
+  life_sciences: ["researcher", "scientist", "clinical_specialist", "manager"],
+  automotive: ["engineer", "designer", "technician", "sales"],
+  sports_recreation: ["coach", "trainer", "athlete", "manager"],
+  insurance: ["agent", "underwriter", "adjuster", "manager"],
+  mining_resources: ["engineer", "geologist", "operator", "manager"],
+};
+
+export const config: Omit<CatalogConfig, "outputPath"> = {
+  params,
+  domains,
+  roleFamilies,
+  seed: 42,
+};

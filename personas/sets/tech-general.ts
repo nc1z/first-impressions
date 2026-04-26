@@ -1,0 +1,65 @@
+import type { CatalogConfig } from "../generator.js";
+import { params } from "../params.tech-general.js";
+
+const domains: Record<string, string[]> = {
+  technology: ["software_development", "platform_engineering", "developer_tools", "ai_ml", "cybersecurity", "cloud_infrastructure", "mobile_apps"],
+  finance: ["fintech", "trading_systems", "banking_software", "regtech", "payments_infrastructure"],
+  healthcare: ["health_tech", "clinical_software", "telehealth", "medical_devices", "health_data"],
+  education: ["edtech", "learning_management", "educational_software", "remote_learning"],
+  media_entertainment: ["streaming_platforms", "content_tech", "digital_media", "ad_tech"],
+  retail_consumer_goods: ["ecommerce", "retail_analytics", "supply_chain_tech", "recommendation_systems"],
+  food_hospitality: ["restaurant_tech", "delivery_platforms", "food_supply_tech"],
+  professional_services: ["business_intelligence", "workflow_automation", "crm", "consulting_tools"],
+  manufacturing_industry: ["industrial_iot", "manufacturing_software", "supply_chain_tech", "automation"],
+  transportation_logistics: ["logistics_software", "fleet_management_tech", "routing_optimization", "mobility_platforms"],
+  energy_utilities: ["smart_grid", "energy_management_software", "renewable_tech"],
+  real_estate_construction: ["proptech", "construction_software", "smart_buildings"],
+  government_public_sector: ["govtech", "civic_tech", "public_sector_software", "digital_government"],
+  nonprofit_social: ["nonprofit_tech", "fundraising_platforms", "impact_measurement"],
+  environment_cleantech: ["cleantech_software", "sustainability_platforms", "carbon_tracking"],
+  agriculture: ["agtech", "precision_farming_software", "supply_chain_tech"],
+  telecommunications: ["network_software", "telco_platforms", "communications_tech"],
+  aerospace_defense: ["defense_tech", "aerospace_software", "simulation_systems"],
+  legal: ["legal_tech", "contract_management", "compliance_software", "e_discovery"],
+  life_sciences: ["biotech_software", "clinical_trial_tech", "genomics_platforms", "lab_informatics"],
+  automotive: ["connected_vehicles", "autonomous_driving_tech", "automotive_software"],
+  sports_recreation: ["sports_analytics", "fitness_tech", "wearables", "sports_platforms"],
+  insurance: ["insurtech", "claims_software", "underwriting_tech", "risk_analytics"],
+  mining_resources: ["mining_tech", "resource_management_software", "geological_software"],
+};
+
+// Global pool — every persona holds a tech role regardless of industry.
+const roleFamilies: string[] = [
+  "software_engineer",
+  "frontend_developer",
+  "backend_developer",
+  "full_stack_developer",
+  "mobile_developer",
+  "data_engineer",
+  "data_scientist",
+  "ml_engineer",
+  "devops_engineer",
+  "cloud_engineer",
+  "platform_engineer",
+  "product_manager",
+  "ux_designer",
+  "ui_designer",
+  "solutions_architect",
+  "business_analyst",
+  "systems_analyst",
+  "qa_engineer",
+  "cybersecurity_analyst",
+  "it_administrator",
+  "tech_sales",
+  "sales_engineer",
+  "engineering_manager",
+  "technical_writer",
+  "scrum_master",
+];
+
+export const config: Omit<CatalogConfig, "outputPath"> = {
+  params,
+  domains,
+  roleFamilies,
+  seed: 42,
+};
