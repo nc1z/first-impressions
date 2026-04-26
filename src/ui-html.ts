@@ -177,6 +177,31 @@ html,body{height:100%;background:var(--bg);color:var(--text);
   border-radius:20px;display:inline-block;margin-bottom:5px}
 .t-bubble-quote{font-size:11.5px;line-height:1.5;color:#3f3f46}
 
+/* ── presenter ── */
+#presenter{position:absolute;bottom:44px;left:50%;
+  transform:translateX(-50%) translateY(120%);
+  display:flex;flex-direction:column;align-items:center;
+  z-index:15;pointer-events:none;opacity:0}
+#presenter-img{display:block;width:80px;height:80px;border-radius:50%;
+  border:3px solid #fff;box-shadow:0 4px 20px rgba(0,0,0,.13)}
+#presenter-label{margin-top:6px;font-size:11px;font-weight:700;
+  color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+#presenter-bubble-anchor{position:absolute;bottom:44px;left:50%;
+  transform:translate(-50%,calc(-80px - 10px));
+  pointer-events:none;z-index:16;padding-bottom:10px}
+#presenter-bubble{background:var(--text);color:#fff;border-radius:14px;
+  padding:14px 16px 12px;width:280px;max-width:72vw;
+  box-shadow:0 8px 32px rgba(0,0,0,.16),0 2px 6px rgba(0,0,0,.08);
+  white-space:normal;word-break:break-word;
+  transform:scale(0);transform-origin:bottom center;
+  opacity:0;position:relative}
+#presenter-bubble::after{content:'';position:absolute;top:100%;left:50%;
+  transform:translateX(-50%);border:8px solid transparent;
+  border-top-color:var(--text)}
+#presenter-bubble-label{font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px}
+#presenter-bubble-text{font-size:13px;line-height:1.6;color:#fff}
+
 /* ── done bar ── */
 .done-bar{display:none;background:var(--surface);border-top:1px solid var(--border);
   padding:14px 24px;flex-shrink:0}
@@ -328,6 +353,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);
     <div class="t-ambient"></div>
     <div id="seat-layer"></div>
     <div id="bubble-layer"></div>
+    <!-- presenter pitch bubble -->
+    <div id="presenter-bubble-anchor">
+      <div id="presenter-bubble">
+        <div id="presenter-bubble-label">Your pitch</div>
+        <div id="presenter-bubble-text"></div>
+      </div>
+    </div>
+
+    <!-- presenter avatar on stage -->
+    <div id="presenter">
+      <img id="presenter-img" src="" draggable="false">
+      <span id="presenter-label">You</span>
+    </div>
+
     <div class="t-stage-floor"></div>
     <div class="t-stage-line"></div>
   </div>
@@ -356,6 +395,8 @@ var tNextIdx = 0;
 var tScores = [];
 var tTotal = 0;
 var tCompleted = 0;
+var evalQueue = [];       // buffers evaluation events during presenter intro
+var presenterDone = false;
 
 // ── row layout (panoramic arcs) ───────────────────────────
 var ROW_DEFS = [
@@ -473,9 +514,12 @@ document.addEventListener('keydown', function(e) {
 
 // ━━━━ SUBMIT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+var pitchText = '';
+
 function doSubmit() {
   var idea = document.getElementById('idea').value.trim();
   if (!idea) { document.getElementById('idea').focus(); return; }
+  pitchText = idea;
   var btn = document.getElementById('ok-3');
   btn.disabled = true;
   var count = parseInt(document.getElementById('count-slider').value, 10);
@@ -512,7 +556,13 @@ function toRunning() {
   running.classList.remove('hidden');
   anime({ targets: running, opacity:[0,1], translateY:[16,0], duration:480,
     easing:'cubicBezier(.4,0,.2,1)',
-    complete: function() { buildSeats(); }
+    complete: function() {
+      buildSeats();
+      runPresenter(pitchText, function() {
+        presenterDone = true;
+        while (evalQueue.length) addPersona(evalQueue.shift());
+      });
+    }
   });
 }
 
@@ -588,6 +638,50 @@ window.addEventListener('resize', function() {
   if (!document.getElementById('screen-running').classList.contains('hidden')) buildSeats();
 });
 
+// ━━━━ PRESENTER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+function runPresenter(text, onDone) {
+  document.getElementById('presenter-img').src =
+    'https://api.dicebear.com/7.x/notionists/svg?seed=presenter-you&radius=50';
+
+  var presEl   = document.getElementById('presenter');
+  var bubbleEl = document.getElementById('presenter-bubble');
+  var textEl   = document.getElementById('presenter-bubble-text');
+
+  textEl.textContent = text;
+  setRunStatus('Pitching to the audience\u2026');
+
+  // Walk presenter on stage
+  anime({ targets: presEl,
+    opacity: [0, 1], translateY: ['120%', '0%'], translateX: '-50%',
+    duration: 600, easing: 'spring(1, 70, 12, 0)',
+    begin: function() { presEl.style.opacity = '0'; },
+  });
+
+  // Pop bubble open
+  setTimeout(function() {
+    anime({ targets: bubbleEl, opacity: [0, 1], scale: [0, 1],
+      duration: 420, easing: 'spring(1, 90, 12, 0)' });
+  }, 500);
+
+  // Reading time based on text length, then exit
+  var readMs = Math.min(4500, Math.max(2000, text.length * 22));
+  setTimeout(function() {
+    bubbleEl.style.transition = 'opacity 0.2s ease';
+    bubbleEl.style.opacity = '0';
+    setTimeout(function() {
+      anime({ targets: presEl, opacity: [1, 0], translateX: ['-50%', '80px'],
+        duration: 480, easing: 'easeInQuart',
+        complete: function() {
+          presEl.style.display = 'none';
+          setRunStatus('Audience is reacting\u2026');
+          onDone();
+        },
+      });
+    }, 300);
+  }, readMs + 500);
+}
+
 // ━━━━ SSE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 function startSSE(sessionId) {
@@ -610,11 +704,14 @@ function onEvent(ev) {
   if (ev.stage === 'evaluations' && ev.persona && ev.reaction) {
     tCompleted = ev.completed || tCompleted + 1;
     setRunProgress(tCompleted, tTotal);
-    addPersona(ev);
+    if (presenterDone) addPersona(ev);
+    else evalQueue.push(ev);
     return;
   }
   if (ev.stage === 'complete') {
     setRunProgress(tTotal, tTotal);
+    // flush any remaining queue (shouldn't happen but safety net)
+    while (evalQueue.length) addPersona(evalQueue.shift());
     showDone(ev);
     return;
   }
@@ -626,7 +723,10 @@ function onEvent(ev) {
 function setRunProgress(done, tot) {
   var pct = tot > 0 ? Math.round((done / tot) * 100) : 0;
   document.getElementById('run-prog-fill').style.width = pct + '%';
-  document.getElementById('run-status').textContent = done + '\u2009/\u2009' + tot;
+  if (presenterDone) {
+    document.getElementById('run-status').textContent =
+      done + '\u2009/\u2009' + tot;
+  }
 }
 function setRunStatus(msg) {
   document.getElementById('run-status').textContent = msg;
